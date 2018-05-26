@@ -291,6 +291,8 @@ function main {
   # top NEEDS to be updated when new UTILITY functions are added
 
   if [[ "${cmd}" == "audit" ]]; then
+
+    echo "[⚠️ ] Your password is required to run some commands with 'sudo'"
     
     for item in "${items[@]}"; do 
       "${item}" "audit"
