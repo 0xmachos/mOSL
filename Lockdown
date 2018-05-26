@@ -256,6 +256,19 @@ function enable_firewall {
 }
 
 
+function disable_firewall_builin_software {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Disable built-in software from being auto-permitted to listen through firewall"
+
+  audit_command="defaults read /Library/Preferences/com.apple.alf allowsignedenabled | grep -q 0"
+  
+  fix_command="sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -int '0' \
+              && sudo killall -HUP socketfilterfw"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
