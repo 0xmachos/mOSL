@@ -52,6 +52,11 @@ function fix {
   local title=${1:-"?"}
   local command=${2}
 
+  if [[ "${command}" == "null" ]]; then
+    echo "[⚠️ ] ${title} has no command to remediate"
+    return 1
+  fi
+
   if bash -c "${command}"; then
     echo "[✅] ${title} fixed"
     return 0
@@ -66,7 +71,7 @@ function mode_check {
   local mode=${1:-?}
   local title=${2:-?}
   local audit_command=${3:-?}
-  local fix_command=${4}
+  local fix_command=${4:-"null"}
 
   if [[ "${mode}" == "audit" ]]; then
     audit "${title}" "${audit_command}"
