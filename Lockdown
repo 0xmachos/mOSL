@@ -194,6 +194,7 @@ function main {
     echo "Items that can be audited or fixed: "
     for item in "${items[@]}"; do
 
+      # shellcheck disable=SC2116
       item_read="$(echo "${item//_/ }")"
       echo "  [🍎] ${item_read}"
     
