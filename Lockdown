@@ -75,6 +75,7 @@ function get_fix_mode_permission {
 
   local fix_mode_permission
   fix_mode_permission="N"
+  # Double check with user before making changes to their system
 
 # If no version manager ask user if they want to install RVM
   echo "[⚠️ ] You are about to engage FIX mode which WILL make chnages to your Mac 💻"
@@ -169,22 +170,26 @@ function main {
   mapfile -t items < <(echo "${all_functions}" \
                       | awk '{print $2}' \
                       | awk -v top=4 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
+  # Build an array of all but the top 5 and bottom 1 function names
+  # top NEEDS to be updated when new UTILITY functions are added
 
   if [[ "${cmd}" == "audit" ]]; then
     
     for item in "${items[@]}"; do 
       "${item}" "audit"
+      # Call functions in 'items' array with the argument 'audit'
     done
 
   elif [[ "${cmd}" == "fix" ]]; then
 
+    # Confirm the user wants to run FIX mode
     get_fix_mode_permission
 
     for item in "${items[@]}"; do 
 
       if ! "${item}" "audit"; then
       # Run the audit command first
-      # Only run the fix command if the audit fails 
+      # Only run the fix command if audit fails 
         "${item}" "fix"
       fi
     done
@@ -196,6 +201,7 @@ function main {
 
       # shellcheck disable=SC2116
       item_read="$(echo "${item//_/ }")"
+      # Replace underscore with a space, more human readable
       echo "  [🍎] ${item_read}"
     
     done
