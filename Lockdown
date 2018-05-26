@@ -286,8 +286,8 @@ function main {
   all_functions="$(grep "^function" "${0}")"
   mapfile -t items < <(echo "${all_functions}" \
                       | awk '{print $2}' \
-                      | awk -v top=5 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
-  # Build an array of all but the top 5 and bottom 1 function names
+                      | awk -v top=6 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
+  # Build an array of all but the top 6 and bottom 1 function names
   # top NEEDS to be updated when new UTILITY functions are added
 
   if [[ "${cmd}" == "audit" ]]; then
