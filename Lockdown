@@ -14,12 +14,17 @@ IFS=$'\n\t'
 # This makes bash consider newlines and tabs as separating words
 # See: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 
+tput sgr0; # reset colors
+RED=$(tput setaf 1)
+RESET=$(tput sgr0)
+BOLD=$(tput bold)
+
 function usage {
   echo -e "\\nAudit or Fix macOS security settings🔒🍎\\n"
   echo "Usage:"
   echo "  list         - List all items that can be audited/ fixed"
   echo "  audit        - Audit the status of all items (Does NOT change any settings)"
-  echo "  fix          - Attempt to fix all items"
+  echo "  fix          - Attempt to fix all items (${BOLD}${RED}Does${RESET} change settings)"
 
   exit 0
 }
