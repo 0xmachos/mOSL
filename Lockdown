@@ -63,6 +63,7 @@ function audit {
   fi
 }
 
+
 function fix {
 
   local title=${1:-"?"}
@@ -81,6 +82,7 @@ function fix {
     return 1
   fi
 }
+
 
 function mode_check {
 
