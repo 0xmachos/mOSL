@@ -191,6 +191,22 @@ function enable_gatekeeper {
 }
 
 
+function check_SIP {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check SIP enabled"
+
+  audit_command="csrutil status | grep -q 'enabled'"
+  fix_command=''
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 
   local mode=${1:-?}
   local title
