@@ -141,22 +141,6 @@ function enable_automatic_updates {
 }
 
 
-function disable_bluetooth {
-  
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Disable Bluetooth"
-
-  audit_command="defaults read /Library/Preferences/com.apple.Bluetooth ControllerPowerState | grep -q 0"
-  fix_command="sudo defaults write /Library/Preferences/com.apple.Bluetooth ControllerPowerState -int 0 && sudo killall -HUP bluetoothd"
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
 function check_filevault {
 
   local mode=${1:-?}
@@ -164,10 +148,40 @@ function check_filevault {
   local audit_command
   local fix_command
   
-  title="Check FileVault"
+  title="Check FileVault enabled"
 
   audit_command='diskutil apfs list | grep -q -i "FileVault:                 Yes"'
   fix_command=""
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function set_airdrop_contacts_only {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="AirDrop Discoverability: Contacts Only"
+
+  audit_command="defaults read com.apple.sharingd DiscoverableMode | grep -q 'Contacts Only'"
+  
+  fix_command="sudo defaults write com.apple.sharingd DiscoverableMode 'Contacts Only' \
+              && sudo killall -HUP sharingd"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
