@@ -207,6 +207,22 @@ function check_SIP {
 }
 
 
+function check_kext_loading_consent {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check Kernel Extension User Consent required"
+
+  audit_command="spctl kext-consent status | grep -q 'ENABLED'"
+  fix_command=''
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 
   local mode=${1:-?}
   local title
