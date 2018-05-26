@@ -223,6 +223,22 @@ function check_kext_loading_consent {
 }
 
 
+function check_EFI_integrity {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check EFI Firmware Integrity"
+
+  audit_command="/usr/libexec/firmwarecheckers/eficheck/eficheck --integrity-check >/dev/null 2>&1"
+  fix_command=''
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 
   local mode=${1:-?}
   local title
