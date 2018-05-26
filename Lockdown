@@ -78,32 +78,20 @@ function mode_check {
 
 function get_fix_mode_permission {
 
-  local fix_mode_permission
-  fix_mode_permission="N"
   # Double check with user before making changes to their system
 
-# If no version manager ask user if they want to install RVM
-  echo "[⚠️ ] You are about to engage FIX mode which WILL make chnages to your Mac 💻"
-  echo -en "[⚠️ ] Do you want to continue? (y/N) "
-  read -r  fix_mode_permission
+  local fix_mode_permission
+  fix_mode_permission=""
 
-  # Loop untill the user answers one of n/N/y/Y
-  while ! [[ "${fix_mode_permission}" =~ ^(n|N|y|Y)$ ]];
-  do
-    echo -en "[⚠️ ] Do you want to continue? (y/N) "
-    unset fix_mode_permission
-
-    read -r  fix_mode_permission
-  done
+  echo "[⚠️ ] You are about to engage ${BOLD}${RED}FIX${RESET} mode which ${BOLD}${RED}WILL${RESET} make chnages to your Mac 💻"
+  echo -n "[⚠️ ] Do you want to continue? (y/${BOLD}N${RESET}) "
+  read -r fix_mode_permission
 
   if [[ "${fix_mode_permission}" =~ ^(y|Y)$ ]]; then
-    # If the user answers yes then call install_rvm
-    echo -e "[✅] ${USER} has chosen to continue"
     
-    fix_mode_permission="Y"
-
+    echo "[✅] ${USER} has chosen to continue"
+    echo "[⚠️ ] Your password is required to run some commands with 'sudo'"
     sleep 3
-
     return 0
   
   else
