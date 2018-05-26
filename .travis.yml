@@ -1,0 +1,7 @@
+# .travis.yml
+
+language: bash
+script:
+  - ./test
+notifications:
+  email: false

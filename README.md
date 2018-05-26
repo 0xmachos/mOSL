@@ -1,2 +1,3 @@
-# mOSL
-Bash script to Lockdown macOS security settings  
+# macOS Lockdown (mOSL)
+Bash script to Lockdown macOS High Sierra security settings
+

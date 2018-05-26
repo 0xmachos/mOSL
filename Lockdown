@@ -1,0 +1,207 @@
+#!/usr/bin/env bash
+# mOSL/Lockdown
+
+# Lockdown
+#   Lockdown macOS High Sierra security settings
+
+set -uo pipefail
+# -e exit if any command returns non-zero status code
+# -u prevent using undefined variables
+# -o pipefail force pipelines to fail on first non-zero status code
+
+IFS=$'\n\t'
+# Set Internal Field Separator to newlines and tabs
+# This makes bash consider newlines and tabs as separating words
+# See: http://redsymbol.net/articles/unofficial-bash-strict-mode/
+
+function usage {
+  echo -e "\\nAudit or Fix macOS security settings🔒🍎\\n"
+  echo "Usage:"
+  echo "  list         - List all items that can be audited/ fixed"
+  echo "  audit        - Audit the status of all items (Does NOT change any settings)"
+  echo "  fix          - Attempt to fix all items"
+
+  exit 0
+}
+
+
+### UTILITY FUNCTIONS ###
+
+
+function audit {
+
+  local title=${1:-"?"}
+  local command=${2:-"?"}
+
+  if bash -c "${command}"; then
+    echo "[✅] ${title}"
+    return 0
+  else
+    echo "[❌] ${title}"
+    return 1
+  fi
+}
+
+function fix {
+
+  local title=${1:-"?"}
+  local command=${2}
+
+  if bash -c "${command}"; then
+    echo "[✅] ${title} fixed"
+    return 0
+  else
+    echo "[❌] Failed to fix ${title}"
+    return 1
+  fi
+}
+
+function mode_check {
+
+  local mode=${1:-?}
+  local title=${2:-?}
+  local audit_command=${3:-?}
+  local fix_command=${4}
+
+  if [[ "${mode}" == "audit" ]]; then
+    audit "${title}" "${audit_command}"
+  elif [[ "${mode}" == "fix" ]]; then
+    fix "${title}" "${fix_command}"
+  fi
+}
+
+
+function get_fix_mode_permission {
+
+  local fix_mode_permission
+  fix_mode_permission="N"
+
+# If no version manager ask user if they want to install RVM
+  echo "[⚠️ ] You are about to engage FIX mode which WILL make chnages to your Mac 💻"
+  echo -en "[⚠️ ] Do you want to continue? (y/N) "
+  read -r  fix_mode_permission
+
+  # Loop untill the user answers one of n/N/y/Y
+  while ! [[ "${fix_mode_permission}" =~ ^(n|N|y|Y)$ ]];
+  do
+    echo -en "[⚠️ ] Do you want to continue? (y/N) "
+    unset fix_mode_permission
+
+    read -r  fix_mode_permission
+  done
+
+  if [[ "${fix_mode_permission}" =~ ^(y|Y)$ ]]; then
+    # If the user answers yes then call install_rvm
+    echo -e "[✅] ${USER} has chosen to continue"
+    
+    fix_mode_permission="Y"
+
+    sleep 3
+
+    return 0
+  
+  else
+    echo "[❌] ${USER} has chosen to quit"
+    exit 1
+  fi
+}
+
+
+### END UTILITY FUNCTIONS ###
+
+
+function enable_automatic_updates {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Enable Automatic Updates"
+
+  audit_command="sudo softwareupdate --schedule | grep -q 'Automatic check is on'"
+  fix_command="sudo softwareupdate --schedule on"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function disable_bluetooth {
+  
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Disable Bluetooth"
+
+  audit_command="defaults read /Library/Preferences/com.apple.Bluetooth ControllerPowerState | grep -q 0"
+  fix_command="sudo defaults write /Library/Preferences/com.apple.Bluetooth ControllerPowerState -int 0 && sudo killall -HUP bluetoothd"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function check_filevault {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check FileVault"
+
+  audit_command='diskutil apfs list | grep -q -i "FileVault:                 Yes"'
+  fix_command=""
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function main {
+
+  local cmd=${1:-"usage"}
+  local items=()
+  local all_functions
+  local item_read
+
+  all_functions="$(grep "^function" "${0}")"
+  mapfile -t items < <(echo "${all_functions}" \
+                      | awk '{print $2}' \
+                      | awk -v top=4 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
+
+  if [[ "${cmd}" == "audit" ]]; then
+    
+    for item in "${items[@]}"; do 
+      "${item}" "audit"
+    done
+
+  elif [[ "${cmd}" == "fix" ]]; then
+
+    get_fix_mode_permission
+
+    for item in "${items[@]}"; do 
+
+      if ! "${item}" "audit"; then
+      # Run the audit command first
+      # Only run the fix command if the audit fails 
+        "${item}" "fix"
+      fi
+    done
+
+  elif [[ "${cmd}" == "list" ]]; then 
+    
+    echo "Items that can be audited or fixed: "
+    for item in "${items[@]}"; do
+
+      item_read="$(echo "${item//_/ }")"
+      echo "  [🍎] ${item_read}"
+    
+    done
+
+  else [[ "${cmd}" == "usage" ]];
+    usage
+  fi
+}
+
+main "$@"
