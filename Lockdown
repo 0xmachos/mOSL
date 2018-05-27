@@ -127,72 +127,6 @@ function get_fix_mode_permission {
 ### END UTILITY FUNCTIONS ###
 
 
-function enable_automatic_updates {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Enable Automatic Updates"
-
-  audit_command="sudo softwareupdate --schedule | grep -q 'Automatic check is on'"
-  fix_command="sudo softwareupdate --schedule on"
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
-function check_filevault {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Check FileVault enabled"
-
-  audit_command='diskutil apfs list | grep -q -i "FileVault:                 Yes"'
-  fix_command=""
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
-function set_airdrop_contacts_only {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="AirDrop Discoverability: Contacts Only"
-
-  audit_command="defaults read com.apple.sharingd DiscoverableMode | grep -q 'Contacts Only'"
-  
-  fix_command="sudo defaults write com.apple.sharingd DiscoverableMode 'Contacts Only' \
-              && sudo killall -HUP sharingd"
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
-function enable_gatekeeper {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Check Gatekeeper enabled"
-
-  audit_command='spctl --status | grep -q "assessments enabled"'
-  fix_command='spctl --master-enable'
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
 function check_SIP {
 
   local mode=${1:-?}
@@ -241,6 +175,54 @@ function check_EFI_integrity {
 }
 
 
+function check_filevault {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check FileVault enabled"
+
+  audit_command='diskutil apfs list | grep -q -i "FileVault:                 Yes"'
+  fix_command=""
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function enable_automatic_updates {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Enable Automatic Updates"
+
+  audit_command="sudo softwareupdate --schedule | grep -q 'Automatic check is on'"
+  fix_command="sudo softwareupdate --schedule on"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function enable_gatekeeper {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check Gatekeeper enabled"
+
+  audit_command='spctl --status | grep -q "assessments enabled"'
+  fix_command='spctl --master-enable'
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function enable_firewall {
 
   local mode=${1:-?}
@@ -258,23 +240,6 @@ function enable_firewall {
 }
 
 
-function disable_firewall_builin_software {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Disable built-in software from being auto-permitted to listen through firewall"
-
-  audit_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getallowsigned | grep 'built-in' | grep -q 'DISABLED'"
-  
-  fix_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsigned off >/dev/null"
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
 function enable_admin_password_preferences {
 
   local mode=${1:-?}
@@ -287,6 +252,23 @@ function enable_admin_password_preferences {
   audit_command="security -q authorizationdb read system.preferences | grep -A1 'shared' | grep -q 'false'"
   
   fix_command="security -q authorizationdb read system.preferences > /tmp/system.preferences.plist; /usr/libexec/PlistBuddy -c 'Set :shared false' /tmp/system.preferences.plist; security -q authorizationdb write system.preferences < /tmp/system.preferences.plist; rm '/tmp/system.preferences.plist'"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function disable_firewall_builin_software {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Disable built-in software from being auto-permitted to listen through firewall"
+
+  audit_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getallowsigned | grep 'built-in' | grep -q 'DISABLED'"
+  
+  fix_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsigned off >/dev/null"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
