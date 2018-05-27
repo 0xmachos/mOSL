@@ -274,6 +274,24 @@ function disable_firewall_builin_software {
 }
 
 
+function set_airdrop_contacts_only {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="AirDrop Discoverability: 'Contacts Only' or 'No One'"
+
+  audit_command="if defaults read com.apple.sharingd DiscoverableMode 2>/dev/null | grep -q 'Contacts Only'; then exit 0; elif defaults read com.apple.sharingd DiscoverableMode 2>/dev/null | grep -q 'Off'; then exit 0; else exit 1; fi"
+
+  fix_command="defaults write com.apple.sharingd DiscoverableMode -string 'Contacts Only' \
+              && sudo killall -HUP sharingd"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function main {
 
   compatability_check
