@@ -214,7 +214,7 @@ function enable_gatekeeper {
   local audit_command
   local fix_command
   
-  title="Check Gatekeeper enabled"
+  title="Enable Gatekeeper "
 
   audit_command='spctl --status | grep -q "assessments enabled"'
   fix_command='spctl --master-enable'
