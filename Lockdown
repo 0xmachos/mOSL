@@ -127,70 +127,6 @@ function get_fix_mode_permission {
 ### END UTILITY FUNCTIONS ###
 
 
-function check_SIP {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Check SIP enabled"
-
-  audit_command="csrutil status | grep -q 'enabled'"
-  fix_command=''
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
-function check_kext_loading_consent {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Check Kernel Extension User Consent required"
-
-  audit_command="spctl kext-consent status | grep -q 'ENABLED'"
-  fix_command=''
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
-function check_EFI_integrity {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Check EFI Firmware Integrity"
-
-  audit_command="/usr/libexec/firmwarecheckers/eficheck/eficheck --integrity-check >/dev/null 2>&1"
-  fix_command=''
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
-function check_filevault {
-
-  local mode=${1:-?}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Check FileVault enabled"
-
-  audit_command='diskutil apfs list | grep -q -i "FileVault:                 Yes"'
-  fix_command=""
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
 function enable_automatic_updates {
 
   local mode=${1:-?}
@@ -306,6 +242,70 @@ function set_airdrop_contacts_only {
 
   fix_command="defaults write com.apple.sharingd DiscoverableMode -string 'Contacts Only' \
               && sudo killall -HUP sharingd"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function check_SIP {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check SIP enabled"
+
+  audit_command="csrutil status | grep -q 'enabled'"
+  fix_command=''
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function check_kext_loading_consent {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check Kernel Extension User Consent required"
+
+  audit_command="spctl kext-consent status | grep -q 'ENABLED'"
+  fix_command=''
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function check_EFI_integrity {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check EFI Firmware Integrity"
+
+  audit_command="/usr/libexec/firmwarecheckers/eficheck/eficheck --integrity-check >/dev/null 2>&1"
+  fix_command=''
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+function check_filevault {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check FileVault enabled"
+
+  audit_command='diskutil apfs list | grep -q -i "FileVault:                 Yes"'
+  fix_command=""
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
