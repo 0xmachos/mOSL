@@ -250,9 +250,9 @@ function enable_firewall {
   
   title="Enable Firewall"
 
-  audit_command="defaults read /Library/Preferences/com.apple.alf globalstate | grep -q 1"
+  audit_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw  --getglobalstate | grep -q 'enabled'"
   
-  fix_command="sudo defaults write /Library/Preferences/com.apple.alf globalstate -int '1'"
+  fix_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
