@@ -267,10 +267,9 @@ function disable_firewall_builin_software {
   
   title="Disable built-in software from being auto-permitted to listen through firewall"
 
-  audit_command="defaults read /Library/Preferences/com.apple.alf allowsignedenabled | grep -q 0"
+  audit_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getallowsigned | grep 'built-in' | grep -q 'DISABLED'"
   
-  fix_command="sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -int '0' \
-              && sudo killall -HUP socketfilterfw"
+  fix_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsigned off"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
