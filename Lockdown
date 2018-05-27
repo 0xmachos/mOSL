@@ -274,6 +274,25 @@ function disable_firewall_builin_software {
 }
 
 
+function disable_ipv6 {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Disable IPv6"
+
+  # shellcheck disable=SC2016
+  audit_command='while IFS= read -r i; do if networksetup -getinfo "${i}" | grep -q "IPv6: Off"; then :; else exit 1; fi; done <<< $(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))'
+  
+  # shellcheck disable=SC2016
+  fix_command='set -x; while read -r i; do networksetup -setv6off "${i}"; done <<< "$(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))"'
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function set_airdrop_contacts_only {
 
   local mode=${1:-?}
