@@ -75,7 +75,7 @@ function fix {
   fi
 
   if bash -c "${command}"; then
-    echo "[✅] ${title} fixed"
+    echo "[🔧] ${BOLD}FIXED${RESET} ${title} "
     return 0
   else
     echo "[❌] Failed to fix ${title}"
