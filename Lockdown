@@ -333,6 +333,23 @@ function set_airdrop_contacts_only {
 }
 
 
+function set_appstore_update_check_daily {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Set AppStore update check to every one (1) day"
+
+  audit_command="defaults read com.apple.SoftwareUpdate ScheduleFrequency 2>/dev/null | grep -q '1'"
+
+  fix_command="defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function check_SIP {
 
   local mode=${1:-?}
