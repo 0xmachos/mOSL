@@ -474,7 +474,7 @@ function main {
 
   elif [[ "${cmd}" == "list" ]]; then 
     
-    echo "Items that can be audited or fixed: "
+    echo "Items (${BOLD}${#items[@]}${RESET}) that can be audited or fixed: "
     for item in "${items[@]}"; do
 
       # shellcheck disable=SC2116
