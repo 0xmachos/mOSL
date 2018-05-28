@@ -194,6 +194,23 @@ function enable_admin_password_preferences {
 }
 
 
+function enable_terminal_secure_entry {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Enable Terminal.app secure keyboard entry"
+
+  audit_command="defaults read com.apple.Terminal SecureKeyboardEntry | grep -q '1'"
+  
+  fix_command="defaults write com.apple.Terminal SecureKeyboardEntry -bool true"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function disable_firewall_builin_software {
 
   local mode=${1:-?}
