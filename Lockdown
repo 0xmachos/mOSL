@@ -23,8 +23,8 @@ function usage {
   echo -e "\\nAudit or Fix macOS security settings🔒🍎\\n"
   echo "Usage:"
   echo "  list         - List all items that can be audited/ fixed"
-  echo "  audit        - Audit the status of all items (Does NOT change any settings)"
-  echo "  fix          - Attempt to fix all items (${BOLD}${RED}Does${RESET} change settings)"
+  echo "  audit        - Audit the status of all items (Does ${BOLD}NOT${RESET} change settings)"
+  echo "  ${RED}fix${RESET}          - Attempt to fix all items (${BOLD}Does${RESET} change settings)"
 
   exit 0
 }
