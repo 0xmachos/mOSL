@@ -93,6 +93,7 @@ function mode_check {
 
   if [[ "${mode}" == "audit" ]]; then
     audit "${title}" "${audit_command}"
+
   elif [[ "${mode}" == "fix" ]]; then
     fix "${title}" "${fix_command}"
   fi
