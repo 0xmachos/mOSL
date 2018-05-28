@@ -281,6 +281,23 @@ function disable_remote_apple_events {
 }
 
 
+function disable_remote_login {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Disable Remote Login"
+
+  audit_command="sudo systemsetup -getremotelogin | grep -q 'Remote Login: Off'"
+  
+  fix_command="sudo systemsetup -f -setremotelogin off >/dev/null"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function set_airdrop_contacts_only {
 
   local mode=${1:-?}
