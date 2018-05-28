@@ -229,6 +229,23 @@ function disable_ipv6 {
 }
 
 
+function disable_mail_remote_content {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Disable automatic loading of remote content by Mail.app"
+
+  audit_command="defaults read com.apple.mail-shared DisableURLLoading | grep -q '1'"
+  
+  fix_command="defaults write com.apple.mail-shared DisableURLLoading -int '1' && sudo killall -HUP Mail 2>/dev/null"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function set_airdrop_contacts_only {
 
   local mode=${1:-?}
