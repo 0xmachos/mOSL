@@ -42,7 +42,7 @@ function compatability_check {
   
   if [ "${bash_version}" -lt 4 ]; then 
     echo "[❌] Sorry, this script requires Bash 4.x"
-    echo "[🍺] Your Bash version is ${BASH_VERSION}"
+    echo "[🍺] Current Bash version is ${BASH_VERSION}"
     echo "[⬇️] brew install bash"
     exit 1
   fi
