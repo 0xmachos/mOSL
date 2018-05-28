@@ -26,3 +26,28 @@ Usage:
   audit        - Audit the status of all items (Does NOT change any settings)
   fix          - Attempt to fix all items (Does change settings)
 ```
+
+## Settings
+
+Settings that can be audited/ fixed:
+```
+enable automatic updates
+enable gatekeeper
+enable firewall
+enable admin password preferences
+enable terminal secure entry
+disable firewall builin software
+disable firewall downloaded signed
+disable ipv6
+disable mail remote content
+disable remote apple events
+disable remote login
+set airdrop contacts only
+set appstore update check daily
+check SIP
+check kext loading consent
+check EFI integrity
+check filevault
+check firmware password set
+  ```
+  
