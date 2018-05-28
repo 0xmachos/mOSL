@@ -258,7 +258,7 @@ function disable_mail_remote_content {
 
   audit_command="defaults read com.apple.mail-shared DisableURLLoading 2>/dev/null | grep -q '1'"
   
-  fix_command="defaults write com.apple.mail-shared DisableURLLoading -int '1' && sudo killall -HUP Mail 2>/dev/null"
+  fix_command="defaults write com.apple.mail-shared DisableURLLoading -int '1'"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
