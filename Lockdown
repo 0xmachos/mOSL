@@ -211,6 +211,23 @@ function disable_firewall_builin_software {
 }
 
 
+function disable_firewall_downloaded_signed {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Disable downloaded signed software from being auto-permitted to listen through firewall"
+
+  audit_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getallowsigned | grep 'downloaded' | grep -q 'DISABLED'"
+  
+  fix_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsignedapp off >/dev/null"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function disable_ipv6 {
 
   local mode=${1:-?}
