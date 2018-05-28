@@ -239,7 +239,7 @@ function disable_mail_remote_content {
   
   title="Disable automatic loading of remote content by Mail.app"
 
-  audit_command="defaults read com.apple.mail-shared DisableURLLoading | grep -q '1'"
+  audit_command="defaults read com.apple.mail-shared DisableURLLoading 2>/dev/null | grep -q '1'"
   
   fix_command="defaults write com.apple.mail-shared DisableURLLoading -int '1' && sudo killall -HUP Mail 2>/dev/null"
 
