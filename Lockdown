@@ -380,6 +380,25 @@ function check_filevault {
 }
 
 
+function check_firmware_password_set {
+
+  local mode=${1:-?}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Check firmware password set"
+
+  audit_command="sudo firmwarepasswd -check | grep 'Yes'"
+  fix_command=""
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
+############################ 
+
+
 function main {
 
   compatability_check
