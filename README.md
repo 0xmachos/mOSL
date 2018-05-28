@@ -23,7 +23,7 @@ Audit or Fix macOS security settings🔒🍎
 
 Usage:
   list         - List all items that can be audited/ fixed
-  audit        - Audit the status of all items (Does NOT change any settings)
+  audit        - Audit the status of all items (Does NOT change settings)
   fix          - Attempt to fix all items (Does change settings)
 ```
 
