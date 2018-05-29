@@ -465,7 +465,7 @@ function main {
 
     for setting in "${settings[@]}"; do 
 
-      if ! "${setting}" "audit"; then
+      if ! "${setting}" "audit" >/dev/null; then
       # Run the audit command first
       # Only run the fix command if audit fails 
         "${setting}" "fix"
