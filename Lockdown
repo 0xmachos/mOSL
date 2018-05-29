@@ -454,7 +454,7 @@ function main {
 
   if [[ "${cmd}" == "audit" ]]; then
 
-    echo "[⚠️ ] Your password is required to run some commands with 'sudo'"
+    sudo --prompt="[⚠️ ] Password required to run some commands with 'sudo': " : 2>/dev/null
     
     for setting in "${settings[@]}"; do 
       "${setting}" "audit"
