@@ -22,9 +22,9 @@ BOLD=$(tput bold)
 function usage {
   echo -e "\\nAudit or Fix macOS security settings🔒🍎\\n"
   echo "Usage:"
-  echo "  list         - List all items that can be audited/ fixed"
-  echo "  audit        - Audit the status of all items (Does ${BOLD}NOT${RESET} change settings)"
-  echo "  ${RED}fix${RESET}          - Attempt to fix all items (${BOLD}Does${RESET} change settings)"
+  echo "  list         - List all settings that can be audited/ fixed"
+  echo "  audit        - Audit the status of all settings (Does ${BOLD}NOT${RESET} change settings)"
+  echo "  ${RED}fix${RESET}          - Attempt to fix all settings (${BOLD}Does${RESET} change settings)"
 
   exit 0
 }
@@ -439,11 +439,11 @@ function main {
   # Check the system has at least Bash 4.x
 
   local cmd=${1:-"usage"}
-  local items=()
+  local settings=()
   local all_functions
 
   all_functions="$(grep "^function" "${0}")"
-  mapfile -t items < <(echo "${all_functions}" \
+  mapfile -t settings < <(echo "${all_functions}" \
                       | awk '{print $2}' \
                       | awk -v top=6 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
   # Build an array of all but the top 6 and bottom 1 function names
@@ -453,9 +453,9 @@ function main {
 
     echo "[⚠️ ] Your password is required to run some commands with 'sudo'"
     
-    for item in "${items[@]}"; do 
-      "${item}" "audit"
-      # Call functions in 'items' array with the argument 'audit'
+    for setting in "${settings[@]}"; do 
+      "${setting}" "audit"
+      # Call functions in 'settings' array with the argument 'audit'
     done
 
   elif [[ "${cmd}" == "fix" ]]; then
@@ -463,24 +463,24 @@ function main {
     # Confirm the user wants to run FIX mode
     get_fix_mode_permission
 
-    for item in "${items[@]}"; do 
+    for setting in "${settings[@]}"; do 
 
-      if ! "${item}" "audit"; then
+      if ! "${setting}" "audit"; then
       # Run the audit command first
       # Only run the fix command if audit fails 
-        "${item}" "fix"
+        "${setting}" "fix"
       fi
     done
 
   elif [[ "${cmd}" == "list" ]]; then 
     
-    echo "Items (${BOLD}${#items[@]}${RESET}) that can be audited or fixed: "
-    for item in "${items[@]}"; do
+    echo "Settings (${BOLD}${#settings[@]}${RESET}) that can be audited or fixed: "
+    for setting in "${settings[@]}"; do
 
       # shellcheck disable=SC2116
-      item_read="$(echo "${item//_/ }")"
+      setting_read="$(echo "${setting//_/ }")"
       # Replace underscore with a space, more human readable
-      echo "  [🍎] ${item_read}"
+      echo "  [🍎] ${setting_read}"
     
     done
 
