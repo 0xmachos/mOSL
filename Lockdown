@@ -188,7 +188,7 @@ function enable_admin_password_preferences {
 
   audit_command="security -q authorizationdb read system.preferences | grep -A1 'shared' | grep -q 'false'"
   
-  fix_command="security -q authorizationdb read system.preferences > /tmp/system.preferences.plist; /usr/libexec/PlistBuddy -c 'Set :shared false' /tmp/system.preferences.plist; security -q authorizationdb write system.preferences < /tmp/system.preferences.plist; rm '/tmp/system.preferences.plist'"
+  fix_command="security -q authorizationdb read system.preferences > /tmp/system.preferences.plist; /usr/libexec/PlistBuddy -c 'Set :shared false' /tmp/system.preferences.plist; sudo security -q authorizationdb write system.preferences < /tmp/system.preferences.plist; rm '/tmp/system.preferences.plist'"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
