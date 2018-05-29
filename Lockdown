@@ -114,7 +114,10 @@ function get_fix_mode_permission {
   if [[ "${fix_mode_permission}" =~ ^(y|Y)$ ]]; then
     
     echo "[✅] ${USER} has chosen to continue"
-    echo "[⚠️ ] Your password is required to run some commands with 'sudo'"
+    sudo --prompt="[⚠️ ] Password required to run some commands with 'sudo': " : 2>/dev/null
+    # Aquire sudo privlidges now so we can show a custom prompt
+    # This tries to execute the bash null operator ':' which does nothing
+    # Send stderr to /dev/null  
     sleep 3
     return 0
   
