@@ -70,15 +70,15 @@ function fix {
   local command=${2}
 
   if [[ "${command}" == "null" ]]; then
-    echo "[⚠️ ] ${title} has no command to remediate"
+    echo "[⚠️ ] ${BOLD}No fix_command${RESET}: ${title}"
     return 1
   fi
 
   if bash -c "${command}"; then
-    echo "[🔧] ${BOLD}FIXED${RESET} ${title} "
+    echo "[✅] ${BOLD}FIXED${RESET}: ${title} "
     return 0
   else
-    echo "[❌] Failed to fix ${title}"
+    echo "[❌] ${BOLD}Failed to fix${RESET}: ${title}"
     return 1
   fi
 }
