@@ -43,7 +43,7 @@ function macos_compatability_check {
   local current_macos_name
   supported_macos_name="High Sierra"
   supported_macos_version="10.13"
-  current_macos_version="$(sw_vers -productVersion)";
+  current_macos_version="$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')";
 
 
   if [ "${current_macos_version}" = "10.10" ]; then
