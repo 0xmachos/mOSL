@@ -41,8 +41,8 @@ function macos_compatability_check {
   local supported_macos_name
   local current_macos_version
   local current_macos_name
-  supported_macos_name="High Sierra"
-  supported_macos_version="10.13"
+  supported_macos_name="Mojave"
+  supported_macos_version="10.14"
   current_macos_version="$(sw_vers -productVersion)";
 
 
