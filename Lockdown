@@ -489,8 +489,8 @@ function main {
   all_functions="$(grep "^function" "${0}")"
   mapfile -t settings < <(echo "${all_functions}" \
                       | awk '{print $2}' \
-                      | awk -v top=6 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
-  # Build an array of all but the top 6 (utility functions) and bottom 1 (main) function names
+                      | awk -v top=7 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
+  # Build an array of all but the top 7 (utility functions) and bottom 1 (main) function names
   # top NEEDS to be updated when new UTILITY functions are added
 
   if [[ "${cmd}" == "audit" ]]; then
