@@ -94,8 +94,8 @@ function bash_compatability_check {
 
 function audit {
 
-  local title=${1:-"?"}
-  local command=${2:-"?"}
+  local title=${1:?No title passed}
+  local command=${2:?No command passed}
 
   if bash -c "${command}"; then
     echo "[✅] ${title}"
@@ -109,8 +109,8 @@ function audit {
 
 function fix {
 
-  local title=${1:-"?"}
-  local command=${2}
+  local title=${1:?No title passed}
+  local command=${2:?No command passed}
 
   if [[ "${command}" == "null" ]]; then
     echo "[⚠️ ] ${BOLD}No fix_command${RESET}: ${title}"
@@ -129,9 +129,9 @@ function fix {
 
 function mode_check {
 
-  local mode=${1:-?}
-  local title=${2:-?}
-  local audit_command=${3:-?}
+  local mode=${1:?}
+  local title=${2:?}
+  local audit_command=${3:?}
   local fix_command=${4:-"null"}
 
   if [[ "${mode}" == "audit" ]]; then
@@ -176,7 +176,7 @@ function get_fix_mode_permission {
 
 function enable_automatic_updates {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -192,7 +192,7 @@ function enable_automatic_updates {
 
 function enable_gatekeeper {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -208,7 +208,7 @@ function enable_gatekeeper {
 
 function enable_firewall {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -225,7 +225,7 @@ function enable_firewall {
 
 function enable_admin_password_preferences {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -242,7 +242,7 @@ function enable_admin_password_preferences {
 
 function enable_terminal_secure_entry {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -259,7 +259,7 @@ function enable_terminal_secure_entry {
 
 function disable_firewall_builin_software {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -276,7 +276,7 @@ function disable_firewall_builin_software {
 
 function disable_firewall_downloaded_signed {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -293,7 +293,7 @@ function disable_firewall_downloaded_signed {
 
 function disable_ipv6 {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -312,7 +312,7 @@ function disable_ipv6 {
 
 function disable_mail_remote_content {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -329,7 +329,7 @@ function disable_mail_remote_content {
 
 function disable_remote_apple_events {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -346,7 +346,7 @@ function disable_remote_apple_events {
 
 function disable_remote_login {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -363,7 +363,7 @@ function disable_remote_login {
 
 function set_airdrop_contacts_only {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -381,7 +381,7 @@ function set_airdrop_contacts_only {
 
 function set_appstore_update_check_daily {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -398,7 +398,7 @@ function set_appstore_update_check_daily {
 
 function check_SIP {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -414,7 +414,7 @@ function check_SIP {
 
 function check_kext_loading_consent {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -430,7 +430,7 @@ function check_kext_loading_consent {
 
 function check_EFI_integrity {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -446,7 +446,7 @@ function check_EFI_integrity {
 
 function check_filevault {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -462,7 +462,7 @@ function check_filevault {
 
 function check_firmware_password_set {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
