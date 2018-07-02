@@ -147,8 +147,7 @@ function get_fix_mode_permission {
 
   # Double check with user before making changes to their system
 
-  local fix_mode_permission
-  fix_mode_permission=""
+  local fix_mode_permission=""
 
   echo "[⚠️ ] You are about to engage ${BOLD}${RED}FIX${RESET} mode which ${BOLD}${RED}WILL${RESET} make changes to your Mac 💻"
   echo -n "[⚠️ ] Do you want to continue? (y/${BOLD}N${RESET}) "
