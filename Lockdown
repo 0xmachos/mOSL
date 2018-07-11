@@ -452,7 +452,7 @@ function check_filevault {
   
   title="Check FileVault enabled"
 
-  audit_command='diskutil apfs list | grep -q -i "FileVault:                 Yes"'
+  audit_command="fdesetup status | grep -q 'On'"
   fix_command=""
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
