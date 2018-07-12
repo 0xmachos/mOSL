@@ -14,6 +14,14 @@ Bash script to audit and fix macOS High Sierra (`10.13.x`) security settings
   - The system version of Bash is currently `3.2.x`
   - `brew install bash` will get you Bash `4.x`
 
+## Verification
+
+The executable `Lockdown` file can be verified with [Minisign](https://jedisct1.github.io/minisign/):
+```
+minisign -Vm Lockdown -P RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU
+```
+Install via `brew`: `brew install minisign`
+
 ## Usage
 
 ```
