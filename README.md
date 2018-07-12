@@ -1,7 +1,7 @@
 # macOS Lockdown (mOSL)
 [![Build Status](https://travis-ci.org/0xmachos/mOSL.svg?branch=master)](https://travis-ci.org/0xmachos/mOSL) [![GitHub Release](https://github-basic-badges.herokuapp.com/release/0xmachos/mOSL.svg)](https://github.com/0xmachos/mOSL/releases/latest)
 
-Bash script to Lockdown macOS High Sierra (`10.13.x`) security settings
+Bash script to audit and fix macOS High Sierra (`10.13.x`) security settings
 
 ## Warnings
 - This script will **only ever** support the _latest_ macOS release  
