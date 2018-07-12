@@ -2,7 +2,7 @@
 # mOSL/Lockdown
 
 # Lockdown
-#   Lockdown macOS High Sierra security settings
+#   Lockdown macOS Mojave security settings
 
 set -uo pipefail
 # -e exit if any command returns non-zero status code
