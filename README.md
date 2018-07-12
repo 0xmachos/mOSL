@@ -57,5 +57,4 @@ check kext loading consent
 check EFI integrity
 check filevault
 check firmware password set
-  ```
-  
+```
