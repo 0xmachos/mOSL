@@ -41,7 +41,7 @@ function usage {
 
 function macos_compatability_check {
 
-  # Check the system is running macOS 10.13
+  # Check the system is running the supoorted version of macOS 
 
   local -r supported_macos_version="10.13"
   local -r supported_macos_name="High Sierra"
@@ -481,7 +481,7 @@ function check_firmware_password_set {
 function main {
 
   macos_compatability_check
-  # Check the system is running macOS 10.13
+  # Check the system is running the supoorted version of macOS 
   bash_compatability_check
   # Check the system has at least Bash 4.x
 
