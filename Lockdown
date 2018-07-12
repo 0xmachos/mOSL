@@ -57,6 +57,9 @@ function macos_compatability_check {
 
   elif [ "${current_macos_version}" = "10.13" ]; then
     current_macos_name="High Sierra"
+
+  elif [ "${current_macos_version}" = "10.14" ]; then
+    current_macos_name="Mojave"
   
   else
     current_macos_name="🤷‍♂️"
