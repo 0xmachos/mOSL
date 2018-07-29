@@ -474,7 +474,7 @@ function check_firmware_password_set {
   
   title="Check firmware password set"
 
-  audit_command="sudo firmwarepasswd -check | grep 'Yes'"
+  audit_command="sudo firmwarepasswd -check | grep -q 'Yes'"
   fix_command=""
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
