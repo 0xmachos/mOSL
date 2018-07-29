@@ -427,7 +427,7 @@ function check_kext_loading_consent {
 }
 
 
-function check_EFI_integrity {
+function check_efi_integrity {
 
   local mode=${1:?No mode passed}
   local title
