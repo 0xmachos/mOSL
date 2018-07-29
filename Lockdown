@@ -2,7 +2,7 @@
 # mOSL/Lockdown
 
 # Lockdown
-#   Lockdown macOS High Sierra security settings
+#   Lockdown macOS Mojave security settings
 
 set -uo pipefail
 # -e exit if any command returns non-zero status code
@@ -44,8 +44,8 @@ function macos_compatability_check {
   # Check if running on a Mac
   # Check if the Mac is running the supoorted version of macOS 
 
-  local -r supported_macos_version="10.13"
-  local -r supported_macos_name="High Sierra"
+  local -r supported_macos_name="Mojave"
+  local -r supported_macos_version="10.14"
   local os
   local current_macos_version
   local current_macos_name
