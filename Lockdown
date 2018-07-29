@@ -45,8 +45,17 @@ function macos_compatability_check {
 
   local -r supported_macos_version="10.13"
   local -r supported_macos_name="High Sierra"
+  local os
   local current_macos_version
   local current_macos_name
+
+  os="$(uname -s)"
+
+  if [[ "${os}" != "Darwin" ]]; then 
+    echo "[❌] Lockdown was built for macOS"
+    exit 1
+  fi
+
   current_macos_version="$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')";
   current_macos_name="$(strings '/Applications/Utilities/System Information.app/Contents/MacOS/System Information' \
                         | grep 'macOS ' \
