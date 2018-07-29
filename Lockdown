@@ -48,26 +48,13 @@ function macos_compatability_check {
   local current_macos_version
   local current_macos_name
   current_macos_version="$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')";
+  current_macos_name="$(strings '/Applications/Utilities/System Information.app/Contents/MacOS/System Information' \
+                        | grep 'macOS ' \
+                        | tail -n 1 \
+                        | awk '{print $2" "$3}')"
+  # This is fragile. The awk statement will need to be updated for each major release
+  # e.g Currentrly assumes OS name has two words, next release (Mojave) only has one 
 
-
-  if [ "${current_macos_version}" = "10.10" ]; then
-    current_macos_name="Yosemite"
-
-  elif [ "${current_macos_version}" = "10.11" ]; then
-    current_macos_name="El Capitan"
-
-  elif [ "${current_macos_version}" = "10.12" ]; then
-    current_macos_name="Sierra"
-
-  elif [ "${current_macos_version}" = "10.13" ]; then
-    current_macos_name="High Sierra"
-  
-  else
-    current_macos_name="🤷‍♂️"
-  fi
-  # This is terrible, afaik there's no command to get the release name 
-
-  
   if [ "${current_macos_version}" != "${supported_macos_version}" ]; then 
     echo "[❌] Lockdown was built for macOS ${supported_macos_name} (${supported_macos_version}.x)"
     echo "[🍺] This is macOS ${current_macos_name} (${current_macos_version})"
