@@ -41,7 +41,8 @@ function usage {
 
 function macos_compatability_check {
 
-  # Check the system is running the supoorted version of macOS 
+  # Check if running on a Mac
+  # Check if the Mac is running the supoorted version of macOS 
 
   local -r supported_macos_version="10.13"
   local -r supported_macos_name="High Sierra"
