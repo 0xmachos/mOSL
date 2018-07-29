@@ -14,10 +14,16 @@ IFS=$'\n\t'
 # This makes bash consider newlines and tabs as separating words
 # See: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 
+### Define Colours ###
+
 tput sgr0; # reset colors
-RED=$(tput setaf 1)
-RESET=$(tput sgr0)
-BOLD=$(tput bold)
+
+readonly RED="$(tput setaf 1)"
+readonly RESET="$(tput sgr0)"
+readonly BOLD="$(tput bold)"
+
+### END Colours ###
+
 
 function usage {
   echo -e "\\nAudit or Fix macOS security settings🔒🍎\\n"
@@ -35,38 +41,30 @@ function usage {
 
 function macos_compatability_check {
 
-  # Check the system is running macOS 10.13
+  # Check if running on a Mac
+  # Check if the Mac is running the supoorted version of macOS 
 
-  local supported_macos_version
-  local supported_macos_name
+  local -r supported_macos_name="Mojave"
+  local -r supported_macos_version="10.14"
+  local os
   local current_macos_version
   local current_macos_name
-  supported_macos_name="Mojave"
-  supported_macos_version="10.14"
-  current_macos_version="$(sw_vers -productVersion)";
 
+  os="$(uname -s)"
 
-  if [ "${current_macos_version}" = "10.10" ]; then
-    current_macos_name="Yosemite"
-
-  elif [ "${current_macos_version}" = "10.11" ]; then
-    current_macos_name="El Capitan"
-
-  elif [ "${current_macos_version}" = "10.12" ]; then
-    current_macos_name="Sierra"
-
-  elif [ "${current_macos_version}" = "10.13" ]; then
-    current_macos_name="High Sierra"
-
-  elif [ "${current_macos_version}" = "10.14" ]; then
-    current_macos_name="Mojave"
-  
-  else
-    current_macos_name="🤷‍♂️"
+  if [[ "${os}" != "Darwin" ]]; then 
+    echo "[❌] Lockdown was built for macOS"
+    exit 1
   fi
-  # This is terrible, afaik there's no command to get the release name 
 
-  
+  current_macos_version="$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')";
+  current_macos_name="$(strings '/Applications/Utilities/System Information.app/Contents/MacOS/System Information' \
+                        | grep 'macOS ' \
+                        | tail -n 1 \
+                        | awk '{print $2" "$3}')"
+  # This is fragile. The awk statement will need to be updated for each major release
+  # e.g Currentrly assumes OS name has two words, next release (Mojave) only has one 
+
   if [ "${current_macos_version}" != "${supported_macos_version}" ]; then 
     echo "[❌] Lockdown was built for macOS ${supported_macos_name} (${supported_macos_version}.x)"
     echo "[🍺] This is macOS ${current_macos_name} (${current_macos_version})"
@@ -93,8 +91,8 @@ function bash_compatability_check {
 
 function audit {
 
-  local title=${1:-"?"}
-  local command=${2:-"?"}
+  local title=${1:?No title passed}
+  local command=${2:?No command passed}
 
   if bash -c "${command}"; then
     echo "[✅] ${title}"
@@ -108,8 +106,8 @@ function audit {
 
 function fix {
 
-  local title=${1:-"?"}
-  local command=${2}
+  local title=${1:?No title passed}
+  local command=${2:?No command passed}
 
   if [[ "${command}" == "null" ]]; then
     echo "[⚠️ ] ${BOLD}No fix_command${RESET}: ${title}"
@@ -128,9 +126,9 @@ function fix {
 
 function mode_check {
 
-  local mode=${1:-?}
-  local title=${2:-?}
-  local audit_command=${3:-?}
+  local mode=${1:?}
+  local title=${2:?}
+  local audit_command=${3:?}
   local fix_command=${4:-"null"}
 
   if [[ "${mode}" == "audit" ]]; then
@@ -146,8 +144,7 @@ function get_fix_mode_permission {
 
   # Double check with user before making changes to their system
 
-  local fix_mode_permission
-  fix_mode_permission=""
+  local fix_mode_permission=""
 
   echo "[⚠️ ] You are about to engage ${BOLD}${RED}FIX${RESET} mode which ${BOLD}${RED}WILL${RESET} make changes to your Mac 💻"
   echo -n "[⚠️ ] Do you want to continue? (y/${BOLD}N${RESET}) "
@@ -175,7 +172,7 @@ function get_fix_mode_permission {
 
 function enable_automatic_updates {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -191,7 +188,7 @@ function enable_automatic_updates {
 
 function enable_gatekeeper {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -207,7 +204,7 @@ function enable_gatekeeper {
 
 function enable_firewall {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -224,7 +221,7 @@ function enable_firewall {
 
 function enable_admin_password_preferences {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -241,7 +238,7 @@ function enable_admin_password_preferences {
 
 function enable_terminal_secure_entry {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -258,7 +255,7 @@ function enable_terminal_secure_entry {
 
 function disable_firewall_builin_software {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -275,7 +272,7 @@ function disable_firewall_builin_software {
 
 function disable_firewall_downloaded_signed {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -292,7 +289,7 @@ function disable_firewall_downloaded_signed {
 
 function disable_ipv6 {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -311,7 +308,7 @@ function disable_ipv6 {
 
 function disable_mail_remote_content {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -328,7 +325,7 @@ function disable_mail_remote_content {
 
 function disable_remote_apple_events {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -345,7 +342,7 @@ function disable_remote_apple_events {
 
 function disable_remote_login {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -362,7 +359,7 @@ function disable_remote_login {
 
 function set_airdrop_contacts_only {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -380,7 +377,7 @@ function set_airdrop_contacts_only {
 
 function set_appstore_update_check_daily {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -397,7 +394,7 @@ function set_appstore_update_check_daily {
 
 function check_SIP {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -413,7 +410,7 @@ function check_SIP {
 
 function check_kext_loading_consent {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -427,9 +424,9 @@ function check_kext_loading_consent {
 }
 
 
-function check_EFI_integrity {
+function check_efi_integrity {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
@@ -439,20 +436,26 @@ function check_EFI_integrity {
   audit_command="/usr/libexec/firmwarecheckers/eficheck/eficheck --integrity-check >/dev/null 2>&1"
   fix_command=''
 
+
+  if system_profiler SPiBridgeDataType | grep -q 'T2'; then 
+    echo "[⚠️ ] Check EFI Firmware Integrity ${RED}is not${RESET} supported by this Mac"
+    return 1 
+  fi
+  
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
 
 
 function check_filevault {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
   
   title="Check FileVault enabled"
 
-  audit_command='diskutil apfs list | grep -q -i "FileVault:                 Yes"'
+  audit_command="fdesetup status | grep -q 'On'"
   fix_command=""
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -461,14 +464,14 @@ function check_filevault {
 
 function check_firmware_password_set {
 
-  local mode=${1:-?}
+  local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
   
   title="Check firmware password set"
 
-  audit_command="sudo firmwarepasswd -check | grep 'Yes'"
+  audit_command="sudo firmwarepasswd -check | grep -q 'Yes'"
   fix_command=""
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -481,7 +484,7 @@ function check_firmware_password_set {
 function main {
 
   macos_compatability_check
-  # Check the system is running macOS 10.13
+  # Check the system is running the supoorted version of macOS 
   bash_compatability_check
   # Check the system has at least Bash 4.x
 
@@ -492,8 +495,8 @@ function main {
   all_functions="$(grep "^function" "${0}")"
   mapfile -t settings < <(echo "${all_functions}" \
                       | awk '{print $2}' \
-                      | awk -v top=6 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
-  # Build an array of all but the top 6 (utility functions) and bottom 1 (main) function names
+                      | awk -v top=7 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
+  # Build an array of all but the top 7 (utility functions) and bottom 1 (main) function names
   # top NEEDS to be updated when new UTILITY functions are added
 
   if [[ "${cmd}" == "audit" ]]; then

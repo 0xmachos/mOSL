@@ -1,7 +1,7 @@
 # macOS Lockdown (mOSL)
-[![Build Status](https://travis-ci.org/0xmachos/mOSL.svg?branch=master)](https://travis-ci.org/0xmachos/mOSL)
+[![Build Status](https://travis-ci.org/0xmachos/mOSL.svg?branch=master)](https://travis-ci.org/0xmachos/mOSL) [![GitHub Release](https://github-basic-badges.herokuapp.com/release/0xmachos/mOSL.svg)](https://github.com/0xmachos/mOSL/releases/latest)
 
-Bash script to Lockdown macOS High Sierra (`10.13.x`) security settings
+Bash script to audit and fix macOS High Sierra (`10.13.x`) security settings
 
 ## Warnings
 - This script will **only ever** support the _latest_ macOS release  
@@ -13,6 +13,14 @@ Bash script to Lockdown macOS High Sierra (`10.13.x`) security settings
 - Bash `4.x` (See: [f1cc515](https://github.com/0xmachos/mOSL/commit/f1cc5157f19ffb38d4cd4d9e18b319201e59810b))
   - The system version of Bash is currently `3.2.x`
   - `brew install bash` will get you Bash `4.x`
+
+## Verification
+
+The executable `Lockdown` file can be verified with [Minisign](https://jedisct1.github.io/minisign/):
+```
+minisign -Vm Lockdown -P RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU
+```
+Install via `brew`: `brew install minisign`
 
 ## Usage
 
@@ -49,5 +57,4 @@ check kext loading consent
 check EFI integrity
 check filevault
 check firmware password set
-  ```
-  
+```
