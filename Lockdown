@@ -30,7 +30,7 @@ function usage {
   echo "Usage:"
   echo "  list         - List all settings that can be audited/ fixed"
   echo "  audit        - Audit the status of all settings (Does ${BOLD}NOT${RESET} change settings)"
-  echo "  ${RED}fix${RESET}          - Attempt to fix all settings (${BOLD}Does${RESET} change settings)"
+  echo "  ${RED}fix${RESET}  {force} - Attempt to fix all settings (${BOLD}Does${RESET} change settings)"
 
   exit 0
 }
@@ -489,6 +489,7 @@ function main {
   # Check the system has at least Bash 4.x
 
   local cmd=${1:-"usage"}
+  local force=${2:-"false"}
   local settings=()
   local all_functions
 
@@ -510,8 +511,10 @@ function main {
 
   elif [[ "${cmd}" == "fix" ]]; then
 
-    # Confirm the user wants to run FIX mode
-    get_fix_mode_permission
+    if [[ "${force}" != "force" ]]; then
+      # Confirm the user wants to run FIX mode
+      get_fix_mode_permission
+    fi
 
     for setting in "${settings[@]}"; do 
 
