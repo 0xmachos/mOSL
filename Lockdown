@@ -490,7 +490,6 @@ function main {
   # Check the system has at least Bash 4.x
 
   local cmd=${1:-"usage"}
-  local force=${2:-"false"}
   local settings=()
   local all_functions
 
@@ -512,8 +511,11 @@ function main {
 
   elif [[ "${cmd}" == "fix" ]]; then
 
-    if [[ "${force}" != "force" ]]; then
+    local fix_force=${2:-"false"}
+
+    if [[ "${fix_force}" != "force" ]]; then
       # Confirm the user wants to run FIX mode
+      # If "fix force" skip the prompt 
       get_fix_mode_permission
     fi
 
