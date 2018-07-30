@@ -16,7 +16,8 @@ IFS=$'\n\t'
 
 ### Define Colours ###
 
-tput sgr0; # reset colors
+tput sgr0; 
+# reset colors
 
 readonly RED="$(tput setaf 1)"
 readonly RESET="$(tput sgr0)"
