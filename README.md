@@ -23,9 +23,9 @@ $ ./Lockdown
 Audit or Fix macOS security settings🔒🍎
 
 Usage:
-  list         - List all items that can be audited/ fixed
-  audit        - Audit the status of all items (Does NOT change settings)
-  fix          - Attempt to fix all items (Does change settings)
+  list         - List all settings that can be audited/ fixed
+  audit        - Audit the status of all settings (Does NOT change settings)
+  fix  {force} - Attempt to fix all settings (Does change settings)
 ```
 
 ## Settings
