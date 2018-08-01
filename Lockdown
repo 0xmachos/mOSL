@@ -491,14 +491,13 @@ function main {
 
   local cmd=${1:-"usage"}
   local settings=()
-  local all_functions
 
-  all_functions="$(grep "^function" "${0}")"
-  mapfile -t settings < <(echo "${all_functions}" \
-                      | awk '{print $2}' \
-                      | awk -v top=7 -v bottom=1 'NR<=top{next};NR>bottom+top{print line[NR%bottom]};{line[NR%bottom]=$0}')
-  # Build an array of all but the top 7 (utility functions) and bottom 1 (main) function names
-  # top NEEDS to be updated when new UTILITY functions are added
+  settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
+                  enable_terminal_secure_entry disable_firewall_builin_software disable_firewall_downloaded_signed\
+                  disable_ipv6 disable_mail_remote_content disable_remote_apple_events disable_remote_login \
+                  set_airdrop_contacts_only set_appstore_update_check_daily check_SIP check_kext_loading_consent \
+                  check_efi_integrity check_filevault check_firmware_password_set)
+
 
   if [[ "${cmd}" == "audit" ]]; then
 
