@@ -5,7 +5,6 @@
 #   Lockdown macOS High Sierra security settings
 
 set -uo pipefail
-# -e exit if any command returns non-zero status code
 # -u prevent using undefined variables
 # -o pipefail force pipelines to fail on first non-zero status code
 
