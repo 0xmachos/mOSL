@@ -43,6 +43,7 @@ function usage {
 # fix
 # mode_check
 # get_fix_mode_permission
+# verify_signature
 
 function macos_compatability_check {
 
@@ -168,6 +169,23 @@ function get_fix_mode_permission {
   else
     echo "[❌] ${USER} has chosen to quit"
     exit 1
+  fi
+}
+
+function verify_signature {
+  
+  # Verify Lockdown signature with minisign
+
+  if [ -x "$(command -v minisign)" ]; then
+
+    if ! minisign -Vm ./Lockdown -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null; then 
+      echo "[❌] Failed to validate Lockdown signature with minisign"
+      exit 1
+    fi
+
+  else
+    echo "[⚠️ ] Unable to verify Lockdown signature as minisign is not installed"
+    echo "[🍺] brew install minisign"
   fi
 }
 
@@ -488,6 +506,8 @@ function check_firmware_password_set {
 
 function main {
 
+  verify_signature
+  # Verify Lockdown signature 
   macos_compatability_check
   # Check the system is running the supoorted version of macOS 
   bash_compatability_check
