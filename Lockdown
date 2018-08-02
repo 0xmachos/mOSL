@@ -37,7 +37,12 @@ function usage {
 
 
 ### UTILITY FUNCTIONS ###
-
+# macos_compatability_check
+# bash_compatability_check
+# audit
+# fix
+# mode_check
+# get_fix_mode_permission
 
 function macos_compatability_check {
 
