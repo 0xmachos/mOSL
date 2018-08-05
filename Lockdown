@@ -38,7 +38,6 @@ function usage {
 
 ### UTILITY FUNCTIONS ###
 # macos_compatability_check
-# bash_compatability_check
 # audit
 # fix
 # mode_check
@@ -74,22 +73,6 @@ function macos_compatability_check {
   if [ "${current_macos_version}" != "${supported_macos_version}" ]; then 
     echo "[❌] Lockdown was built for macOS ${supported_macos_name} (${supported_macos_version}.x)"
     echo "[🍺] This is macOS ${current_macos_name} (${current_macos_version})"
-    exit 1
-  fi
-}
-
-
-function bash_compatability_check {
-
-  # Check the system has at least Bash 4.x
-
-  local bash_version
-  bash_version="$(echo "${BASH_VERSION}" | awk -F '.' '{print $1}')"; 
-  
-  if [ "${bash_version}" -lt 4 ]; then 
-    echo "[❌] Sorry, this script requires Bash 4.x"
-    echo "[🍺] Current Bash version is ${BASH_VERSION}"
-    echo "[⬇️] brew install bash"
     exit 1
   fi
 }
@@ -510,8 +493,6 @@ function main {
   # Verify Lockdown signature 
   macos_compatability_check
   # Check the system is running the supoorted version of macOS 
-  bash_compatability_check
-  # Check the system has at least Bash 4.x
 
   local cmd=${1:-"usage"}
   local settings=()
