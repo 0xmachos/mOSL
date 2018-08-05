@@ -13,7 +13,7 @@ The executable `Lockdown` file can be verified with [Minisign](https://jedisct1.
 ```
 minisign -Vm Lockdown -P RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU
 ```
-Install via `brew`: `brew install minisign`
+Install via [brew](https://brew.sh/): `brew install minisign`
 
 ## Usage
 
