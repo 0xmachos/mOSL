@@ -44,6 +44,7 @@ function usage {
 # get_fix_mode_permission
 # verify_signature
 
+
 function macos_compatability_check {
 
   # Check if running on a Mac
@@ -154,6 +155,7 @@ function get_fix_mode_permission {
     exit 1
   fi
 }
+
 
 function verify_signature {
   
