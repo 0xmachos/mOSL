@@ -400,7 +400,7 @@ function set_appstore_update_check_daily {
 }
 
 
-function check_SIP {
+function check_sip {
 
   local mode=${1:?No mode passed}
   local title
@@ -502,7 +502,7 @@ function main {
   settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry disable_firewall_builin_software disable_firewall_downloaded_signed\
                   disable_ipv6 disable_mail_remote_content disable_remote_apple_events disable_remote_login \
-                  set_airdrop_contacts_only set_appstore_update_check_daily check_SIP check_kext_loading_consent \
+                  set_airdrop_contacts_only set_appstore_update_check_daily check_sip check_kext_loading_consent \
                   check_efi_integrity check_filevault check_firmware_password_set)
 
 
