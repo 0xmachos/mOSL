@@ -15,6 +15,14 @@ minisign -Vm Lockdown -P RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDP
 ```
 Install via `brew`: `brew install minisign`
 
+## Verification
+
+The executable `Lockdown` file can be verified with [Minisign](https://jedisct1.github.io/minisign/):
+```
+minisign -Vm Lockdown -P RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU
+```
+Install via `brew`: `brew install minisign`
+
 ## Usage
 
 ```

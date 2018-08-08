@@ -2,7 +2,7 @@
 # mOSL/Lockdown
 
 # Lockdown
-#   Lockdown macOS High Sierra security settings
+#   Lockdown macOS Mojave security settings
 
 set -uo pipefail
 # -u prevent using undefined variables
@@ -50,8 +50,8 @@ function macos_compatability_check {
   # Check if running on a Mac
   # Check if the Mac is running the supoorted version of macOS 
 
-  local -r supported_macos_version="10.13"
-  local -r supported_macos_name="High Sierra"
+  local -r supported_macos_name="Mojave"
+  local -r supported_macos_version="10.14"
   local os
   local current_macos_version
   local current_macos_name
@@ -443,7 +443,6 @@ function check_efi_integrity {
 
   audit_command="/usr/libexec/firmwarecheckers/eficheck/eficheck --integrity-check >/dev/null 2>&1"
   fix_command=''
-
 
   if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
     echo "[⚠️ ] Check EFI Firmware Integrity ${RED}is not${RESET} supported by this Mac"
