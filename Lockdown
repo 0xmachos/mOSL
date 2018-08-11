@@ -451,7 +451,7 @@ function check_efi_integrity {
 
 
   if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
-    echo "[⚠️ ] Check EFI Firmware Integrity ${RED}is not${RESET} supported by this Mac"
+    echo "  [⚠️ ] Check EFI Firmware Integrity ${RED}is not${RESET} supported by this Mac"
     audit_fails=$((audit_fails-1))
     return 1 
   fi
