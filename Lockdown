@@ -410,7 +410,7 @@ function check_sip {
   title="Check SIP enabled"
 
   audit_command="csrutil status | grep -q 'enabled'"
-  fix_command=''
+  fix_command="sudo csrutil clear >/dev/null"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
