@@ -85,10 +85,10 @@ function audit {
   local command=${2:?No command passed}
 
   if bash -c "${command}"; then
-    echo "[✅] ${title}"
+    echo "  [✅] ${title}"
     return 0
   else
-    echo "[❌] ${title}"
+    echo "  [❌] ${title}"
     return 1
   fi
 }
@@ -100,19 +100,20 @@ function fix {
   local command=${2:?No command passed}
 
   if [[ "${command}" == "null" ]]; then
-    echo "[⚠️ ] ${BOLD}No fix_command${RESET}: ${title}"
+    echo "  [⚠️ ] ${BOLD}No fix_command${RESET}: ${title}"
+    no_fix_commands=$((no_fix_commands+1))
     return 1
   fi
 
   if bash -c "${command}"; then
-    echo "[✅] ${BOLD}FIXED${RESET}: ${title} "
+    echo "  [✅] ${BOLD}FIXED${RESET}: ${title}"
 
     if [[ "${title}" == "Check SIP enabled" ]]; then
-      echo "[⚠️ ] ${BOLD}Reboot required for SIP configuration changes to take effect"
+      echo "  [⚠️ ] ${BOLD}Reboot required for SIP configuration changes to take effect"
     fi
     return 0
   else
-    echo "[❌] ${BOLD}Failed to fix${RESET}: ${title}"
+    echo "  [❌] ${BOLD}Failed to fix${RESET}: ${title}"
     return 1
   fi
 }
@@ -451,6 +452,7 @@ function check_efi_integrity {
 
   if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
     echo "[⚠️ ] Check EFI Firmware Integrity ${RED}is not${RESET} supported by this Mac"
+    audit_fails=$((audit_fails-1))
     return 1 
   fi
   
@@ -502,6 +504,12 @@ function main {
 
   local cmd=${1:-"usage"}
   local settings=()
+  local -i audit_fails=0
+  declare -i no_fix_commands
+  declare -i successful_fixes
+  no_fix_commands=0
+  successful_fixes=0
+
 
   settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry disable_firewall_builin_software disable_firewall_downloaded_signed\
@@ -513,11 +521,21 @@ function main {
   if [[ "${cmd}" == "audit" ]]; then
 
     sudo --prompt="[⚠️ ] Password required to run some commands with 'sudo': " : 2>/dev/null
+
+    echo -e "\nResults: "
     
     for setting in "${settings[@]}"; do 
-      "${setting}" "audit"
+      if ! "${setting}" "audit"; then 
       # Call functions in 'settings' array with the argument 'audit'
+        audit_fails=$((audit_fails+1))
+      fi
     done
+
+    if [ "${audit_fails}" -le 0 ]; then
+      echo -e "\n [🎉] All settings passed!"
+    else
+      echo -e "\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\n"
+    fi
 
   elif [[ "${cmd}" == "fix" ]]; then
 
@@ -529,14 +547,27 @@ function main {
       get_fix_mode_permission
     fi
 
+    echo -e "\nResults: "
+
     for setting in "${settings[@]}"; do 
 
       if ! "${setting}" "audit" >/dev/null; then
       # Run the audit command first
-      # Only run the fix command if audit fails 
-        "${setting}" "fix"
+      # Only run the fix command if audit fails
+        audit_fails=$((audit_fails+1))
+        
+        if "${setting}" "fix"; then
+          successful_fixes=$((successful_fixes+1))
+        fi
       fi
     done
+
+    if [ "${audit_fails}" -le 0 ]; then
+      echo -e "\n[🎉] Nothing to fix!\n"
+    else
+      echo -e "\n  [🎉] ${BOLD}${successful_fixes}${RESET}/${#settings[@]} settings fixed!"
+      echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings ${RED}failed${RESET} which can't be programmatically fixed 😢\n"
+    fi
 
   elif [[ "${cmd}" == "list" ]]; then
 
