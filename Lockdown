@@ -100,7 +100,7 @@ function fix {
   local command=${2:?No command passed}
 
   if [[ "${command}" == "null" ]]; then
-    echo "  [⚠️ ] ${BOLD}No fix_command${RESET}: ${title}"
+    echo "  [⚠️ ] ${BOLD}Can't fix${RESET}: ${title}"
     no_fix_commands=$((no_fix_commands+1))
     return 1
   fi
@@ -565,8 +565,9 @@ function main {
     if [ "${audit_fails}" -le 0 ]; then
       echo -e "\n[🎉] Nothing to fix!\n"
     else
-      echo -e "\n  [🎉] ${BOLD}${successful_fixes}${RESET}/${#settings[@]} settings fixed!"
-      echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings ${RED}failed${RESET} which can't be programmatically fixed 😢\n"
+      echo -e "\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
+      echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} settings fixed!"
+      echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\n"
     fi
 
   elif [[ "${cmd}" == "list" ]]; then
