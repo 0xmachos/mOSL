@@ -106,6 +106,10 @@ function fix {
 
   if bash -c "${command}"; then
     echo "[✅] ${BOLD}FIXED${RESET}: ${title} "
+
+    if [[ "${title}" == "Check SIP enabled" ]]; then
+      echo "[⚠️ ] ${BOLD}Reboot required for SIP configuration changes to take effect"
+    fi
     return 0
   else
     echo "[❌] ${BOLD}Failed to fix${RESET}: ${title}"
