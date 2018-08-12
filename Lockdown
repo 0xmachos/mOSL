@@ -546,111 +546,113 @@ function main {
                   set_airdrop_contacts_only set_appstore_update_check_daily check_sip check_kext_loading_consent \
                   check_efi_integrity check_filevault check_firmware_password_set)
 
-  while [[ "${#}" -ge 0 ]]; do
-    case "${cmd}" in
 
-      list)
-        declare -i setting_index=0 
-        echo -e "\\nSettings (${BOLD}${#settings[@]}${RESET}) that can be audited or fixed: "
-        for setting in "${settings[@]}"; do
-          setting_index=$((setting_index+1)) 
+  case "${cmd}" in
 
-          # shellcheck disable=SC2116
-          setting_read="$(echo "${setting//_/ }")"
-          # Replace underscore with a space, more human readable
-          echo "  [${RED}${setting_index}${RESET}] ${setting_read}"
-  
+    list)
+      declare -i setting_index=0 
+      echo -e "\\nSettings (${BOLD}${#settings[@]}${RESET}) that can be audited or fixed: "
+      
+      for setting in "${settings[@]}"; do
+        setting_index=$((setting_index+1)) 
+
+        # shellcheck disable=SC2116
+        setting_read="$(echo "${setting//_/ }")"
+        # Replace underscore with a space, more human readable
+        echo "  [${RED}${setting_index}${RESET}] ${setting_read}"
+
+      done
+      echo ""
+      shift # past argument
+      shift # past value
+      ;;
+
+    audit)
+      audit_setting_num=${2:-""}
+
+      check_index "${audit_setting_num}"
+      sudo_prompt
+
+      echo -e "\\nResults: "
+      
+      if ! [[ -z "${audit_setting_num}"  ]]; then
+        if ! "${settings[${audit_setting_num}]}" "audit"; then
+        # Audit whichever setting has been passed to  
+          audit_fails=$((audit_fails+1))
+        fi
+
+      else
+
+        for setting in "${settings[@]}"; do 
+          if ! "${setting}" "audit"; then 
+          # Call functions in 'settings' array with the argument 'audit'
+          audit_fails=$((audit_fails+1))
+          fi
         done
-        echo ""
-        shift # past argument
-        shift # past value
-        ;;
+      fi
 
-      audit)
-        local audit_setting_num=${2:-""}
+      if [ "${audit_fails}" -le 0 ]; then
+        echo -e "\\n  [🎉] All settings passed!"
+      else
+        echo -e "\\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\\n"
+      fi
+      shift # past argument
+      shift # past value
+      ;;
 
-        check_index "${audit_setting_num}"
-        sudo_prompt
+    fix|force-fix)
+      fix_setting_num=${2:-""}
 
-        echo -e "\\nResults: "
-        
-        if ! [[ -z "${audit_setting_num}"  ]]; then
-          if ! "${settings[${audit_setting_num}]}" "audit"; then
-          # Audit whichever setting has been passed to  
+      check_index "${fix_setting_num}"
+
+      if [[ "${cmd}" != "force-fix" ]]; then
+        # Confirm the user wants to run FIX mode
+        # If "fix force" skip the prompt 
+          get_fix_mode_permission
+      fi
+
+      echo -e "\\nResults: "
+
+      if ! [[ -z "${fix_setting_num}"  ]]; then
+        if ! "${settings[${fix_setting_num}]}" "audit"; then
+        # Audit whichever setting has been passed to  
+          fix_fails=$((fix_fails+1))
+        fi
+      else
+
+        for setting in "${settings[@]}"; do 
+
+          if ! "${setting}" "audit" >/dev/null; then
+          # Run the audit command first
+          # Only run the fix command if audit fails
             audit_fails=$((audit_fails+1))
-          fi
-
-        else
-
-          for setting in "${settings[@]}"; do 
-            if ! "${setting}" "audit"; then 
-            # Call functions in 'settings' array with the argument 'audit'
-            audit_fails=$((audit_fails+1))
+      
+            if "${setting}" "fix"; then
+              successful_fixes=$((successful_fixes+1))
             fi
-          done
-        fi
-
-        if [ "${audit_fails}" -le 0 ]; then
-          echo -e "\\n  [🎉] All settings passed!"
-        else
-          echo -e "\\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\\n"
-        fi
-        shift # past argument
-        shift # past value
-        ;;
-
-      fix|force-fix)
-        local fix_setting_num=${2:-""}
-
-        check_index "${fix_setting_num}"
-
-        if [[ "${cmd}" != "force-fix" ]]; then
-          # Confirm the user wants to run FIX mode
-          # If "fix force" skip the prompt 
-            get_fix_mode_permission
-        fi
-
-        echo -e "\\nResults: "
-
-        if ! [[ -z "${fix_setting_num}"  ]]; then
-          if ! "${settings[${fix_setting_num}]}" "audit"; then
-          # Audit whichever setting has been passed to  
-            fix_fails=$((fix_fails+1))
           fi
-        else
+        done
+      fi
 
-          for setting in "${settings[@]}"; do 
+      if [ "${audit_fails}" -le 0 ]; then
+        echo -e "\\n  [🎉] Nothing to fix!\\n"
+      else
+        echo -e "\\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
+        echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} settings fixed!"
+        echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\\n"
+      fi
 
-            if ! "${setting}" "audit" >/dev/null; then
-            # Run the audit command first
-            # Only run the fix command if audit fails
-              audit_fails=$((audit_fails+1))
-        
-              if "${setting}" "fix"; then
-                successful_fixes=$((successful_fixes+1))
-              fi
-            fi
-          done
-        fi
+      shift # past argument
+      shift # past value
+      ;;
 
-        if [ "${audit_fails}" -le 0 ]; then
-          echo -e "\\n  [🎉] Nothing to fix!\\n"
-        else
-          echo -e "\\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
-          echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} settings fixed!"
-          echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\\n"
-        fi
+    usage|*)
+      echo -e "\\n  [❌] ${RED}Invalid command:${RESET} ${cmd}"
+      usage
+      shift
+      ;;
+  esac
 
-        shift # past argument
-        shift # past value
-        ;;
-
-      usage|*)
-        usage
-        shift
-        ;;
-    esac
-done
 }
 
 main "$@"
