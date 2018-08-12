@@ -47,6 +47,7 @@ function usage {
 # get_fix_mode_permission
 # verify_signature
 # check_index
+# sudo_prompt
 
 
 function macos_compatability_check {
@@ -152,11 +153,7 @@ function get_fix_mode_permission {
   if [[ "${fix_mode_permission}" =~ ^(y|Y)$ ]]; then
     
     echo "[✅] ${USER} has chosen to continue"
-    sudo --prompt="[⚠️ ] Password required to run some commands with 'sudo': " : 2>/dev/null
-    # Aquire sudo privlidges now so we can show a custom prompt
-    # This tries to execute the bash null operator ':' which does nothing
-    # Send stderr to /dev/null  
-    sleep 3
+    sudo_prompt
     return 0
   
   else
@@ -195,6 +192,14 @@ function check_index {
     echo "  [⚠️ ] Pick a setting between 1 and ${#settings[@]}"
     exit 1
   fi
+}
+
+
+function sudo_prompt {
+
+  sudo --prompt="[⚠️ ] Password required to run some commands with 'sudo': " -v
+  # Aquire sudo privlidges now so we can show a custom prompt
+  # -v updates the user's cached credentials, does not run a command
 }
 
 
