@@ -188,6 +188,12 @@ function check_index {
 
   local setting_num=${1:-0}
 
+  if ! [[ "${setting_num}" =~ ^[0-9]+$ ]] ; then
+   echo "  [❌] ${RED}${setting_num} is not an integer${RESET}"
+   echo "  [⚠️ ] Pick a setting between 1 and ${#settings[@]}"
+   exit 1
+  fi
+
   if [ "${setting_num}" -gt "${#settings[@]}" ]; then
     echo -e "\\n  [❌] ${RED}No setting with index of ${setting_num}${RESET}" 
     echo "  [⚠️ ] Pick a setting between 1 and ${#settings[@]}"
