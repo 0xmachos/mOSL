@@ -27,10 +27,13 @@ readonly BOLD="$(tput bold)"
 
 function usage {
   echo -e "\\nAudit or Fix macOS security settings🔒🍎\\n"
-  echo "Usage:"
-  echo "  list         - List all settings that can be audited/ fixed"
-  echo "  audit        - Audit the status of all settings (Does ${BOLD}NOT${RESET} change settings)"
-  echo "  ${RED}fix${RESET}  {force} - Attempt to fix all settings (${BOLD}Does${RESET} change settings)"
+  echo -e "Usage: ./Lockdown [list | audit {setting_index} | fix {setting_index}]\\n"
+
+  echo "  list         - List settings that can be audited/ fixed 📝" 
+  echo "  audit        - Audit the status of all or chosen setting(s) (${BOLD}Does NOT change settings${RESET}) 🧐"
+  echo -e "  ${RED}fix${RESET}          - Attempt to fix all or chosen setting(s) (${BOLD}Does change settings${RESET})🛠 \\n"
+  echo "  ${RED}force-fix${RESET}    - Same as 'fix' however bypasses user confirmation prompt"
+  echo -e "                 Can be used to invoke Lockdown from other scripts\\n"
 
   exit 0
 }
@@ -43,6 +46,7 @@ function usage {
 # mode_check
 # get_fix_mode_permission
 # verify_signature
+# check_index
 
 
 function macos_compatability_check {
@@ -176,6 +180,20 @@ function verify_signature {
   else
     echo "[⚠️ ] Unable to verify Lockdown signature as minisign is not installed"
     echo "[🍺] brew install minisign"
+  fi
+}
+
+
+function check_index {
+
+  # Check that index supplied to audit/ fix isn't greater than the number of entries in settings 
+
+  local setting_num=${1:-0}
+
+  if [ "${setting_num}" -gt "${#settings[@]}" ]; then
+    echo -e "\\n  [❌] ${RED}No setting with index of ${setting_num}${RESET}" 
+    echo "  [⚠️ ] Pick a setting between 1 and ${#settings[@]}"
+    exit 1
   fi
 }
 
@@ -502,14 +520,13 @@ function main {
   macos_compatability_check
   # Check the system is running the supoorted version of macOS 
 
-  local cmd=${1:-"usage"}
-  local settings=()
-  local -i audit_fails=0
+  cmd=${1:-"usage"}
+  settings=()
+  declare -i audit_fails=0
   declare -i no_fix_commands
   declare -i successful_fixes
   no_fix_commands=0
   successful_fixes=0
-
 
   settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry disable_firewall_builin_software disable_firewall_downloaded_signed\
@@ -517,77 +534,111 @@ function main {
                   set_airdrop_contacts_only set_appstore_update_check_daily check_sip check_kext_loading_consent \
                   check_efi_integrity check_filevault check_firmware_password_set)
 
+  while [[ "${#}" -ge 0 ]]; do
+    case "${cmd}" in
 
-  if [[ "${cmd}" == "audit" ]]; then
+      list)
+        declare -i setting_index=0 
+        echo -e "\\nSettings (${BOLD}${#settings[@]}${RESET}) that can be audited or fixed: "
+        for setting in "${settings[@]}"; do
+          setting_index=$((setting_index+1)) 
 
-    sudo --prompt="[⚠️ ] Password required to run some commands with 'sudo': " : 2>/dev/null
+          # shellcheck disable=SC2116
+          setting_read="$(echo "${setting//_/ }")"
+          # Replace underscore with a space, more human readable
+          echo "  [${RED}${setting_index}${RESET}] ${setting_read}"
+  
+        done
+        echo ""
+        shift # past argument
+        shift # past value
+        ;;
 
-    echo -e "\\nResults: "
-    
-    for setting in "${settings[@]}"; do 
-      if ! "${setting}" "audit"; then 
-      # Call functions in 'settings' array with the argument 'audit'
-        audit_fails=$((audit_fails+1))
-      fi
-    done
+      audit)
+        local audit_setting_num=${2:-""}
 
-    if [ "${audit_fails}" -le 0 ]; then
-      echo -e "\\n [🎉] All settings passed!"
-    else
-      echo -e "\\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\\n"
-    fi
+        check_index "${audit_setting_num}"
+        sudo_prompt
 
-  elif [[ "${cmd}" == "fix" ]]; then
-
-    local fix_force=${2:-"false"}
-
-    if [[ "${fix_force}" != "force" ]]; then
-      # Confirm the user wants to run FIX mode
-      # If "fix force" skip the prompt 
-      get_fix_mode_permission
-    fi
-
-    echo -e "\\nResults: "
-
-    for setting in "${settings[@]}"; do 
-
-      if ! "${setting}" "audit" >/dev/null; then
-      # Run the audit command first
-      # Only run the fix command if audit fails
-        audit_fails=$((audit_fails+1))
+        echo -e "\\nResults: "
         
-        if "${setting}" "fix"; then
-          successful_fixes=$((successful_fixes+1))
+        if ! [[ -z "${audit_setting_num}"  ]]; then
+          if ! "${settings[${audit_setting_num}]}" "audit"; then
+          # Audit whichever setting has been passed to  
+            audit_fails=$((audit_fails+1))
+          fi
+
+        else
+
+          for setting in "${settings[@]}"; do 
+            if ! "${setting}" "audit"; then 
+            # Call functions in 'settings' array with the argument 'audit'
+            audit_fails=$((audit_fails+1))
+            fi
+          done
         fi
-      fi
-    done
 
-    if [ "${audit_fails}" -le 0 ]; then
-      echo -e "\\n[🎉] Nothing to fix!\\n"
-    else
-      echo -e "\\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
-      echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} settings fixed!"
-      echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\\n"
-    fi
+        if [ "${audit_fails}" -le 0 ]; then
+          echo -e "\\n  [🎉] All settings passed!"
+        else
+          echo -e "\\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\\n"
+        fi
+        shift # past argument
+        shift # past value
+        ;;
 
-  elif [[ "${cmd}" == "list" ]]; then
+      fix|force-fix)
+        local fix_setting_num=${2:-""}
 
-    declare -i setting_index=0 
-    
-    echo "Settings (${BOLD}${#settings[@]}${RESET}) that can be audited or fixed: "
-    for setting in "${settings[@]}"; do
-      setting_index=$((setting_index+1)) 
+        check_index "${fix_setting_num}"
 
-      # shellcheck disable=SC2116
-      setting_read="$(echo "${setting//_/ }")"
-      # Replace underscore with a space, more human readable
-      echo "  [${RED}${setting_index}${RESET}] ${setting_read}"
-    
-    done
+        if [[ "${cmd}" != "force-fix" ]]; then
+          # Confirm the user wants to run FIX mode
+          # If "fix force" skip the prompt 
+            get_fix_mode_permission
+        fi
 
-  else
-    usage
-  fi
+        echo -e "\\nResults: "
+
+        if ! [[ -z "${fix_setting_num}"  ]]; then
+          if ! "${settings[${fix_setting_num}]}" "audit"; then
+          # Audit whichever setting has been passed to  
+            fix_fails=$((fix_fails+1))
+          fi
+        else
+
+          for setting in "${settings[@]}"; do 
+
+            if ! "${setting}" "audit" >/dev/null; then
+            # Run the audit command first
+            # Only run the fix command if audit fails
+              audit_fails=$((audit_fails+1))
+        
+              if "${setting}" "fix"; then
+                successful_fixes=$((successful_fixes+1))
+              fi
+            fi
+          done
+        fi
+
+        if [ "${audit_fails}" -le 0 ]; then
+          echo -e "\\n  [🎉] Nothing to fix!\\n"
+        else
+          echo -e "\\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
+          echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} settings fixed!"
+          echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\\n"
+        fi
+
+        shift # past argument
+        shift # past value
+        ;;
+
+      usage|*)
+        usage
+        shift
+        ;;
+    esac
+done
 }
 
 main "$@"
