@@ -537,10 +537,8 @@ function main {
   cmd=${1:-"usage"}
   settings=()
   declare -i audit_fails=0
-  declare -i no_fix_commands
-  declare -i successful_fixes
-  no_fix_commands=0
-  successful_fixes=0
+  declare -i no_fix_commands=0
+  declare -i successful_fixes=0
 
   settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry disable_firewall_builin_software disable_firewall_downloaded_signed\
