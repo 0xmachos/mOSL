@@ -522,7 +522,7 @@ function main {
 
     sudo --prompt="[⚠️ ] Password required to run some commands with 'sudo': " : 2>/dev/null
 
-    echo -e "\nResults: "
+    echo -e "\\nResults: "
     
     for setting in "${settings[@]}"; do 
       if ! "${setting}" "audit"; then 
@@ -532,9 +532,9 @@ function main {
     done
 
     if [ "${audit_fails}" -le 0 ]; then
-      echo -e "\n [🎉] All settings passed!"
+      echo -e "\\n [🎉] All settings passed!"
     else
-      echo -e "\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\n"
+      echo -e "\\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\\n"
     fi
 
   elif [[ "${cmd}" == "fix" ]]; then
@@ -547,7 +547,7 @@ function main {
       get_fix_mode_permission
     fi
 
-    echo -e "\nResults: "
+    echo -e "\\nResults: "
 
     for setting in "${settings[@]}"; do 
 
