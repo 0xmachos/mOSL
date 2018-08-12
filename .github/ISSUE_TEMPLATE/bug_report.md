@@ -9,19 +9,27 @@ about: Create a report to help us improve
 **macOS**
 - Version: `10.13.x`
 
+**Lockdown**
+- Version: `v1.6.0`
+
 **Describe the bug**
+
 A clear and concise description of what the bug is.
 
 **To Reproduce**
+
 Steps to reproduce the behavior:
 1. Execute .`/Lockdown ...`
 2. See error
 
 **Expected behavior**
+
 A clear and concise description of what you expected to happen.
 
 **Terminal Output**
+
 If applicable, copy and paste your terminal output to help explain your problem.
 
 **Additional context**
+
 Add any other context about the problem here.
