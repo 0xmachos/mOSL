@@ -563,11 +563,11 @@ function main {
     done
 
     if [ "${audit_fails}" -le 0 ]; then
-      echo -e "\n[🎉] Nothing to fix!\n"
+      echo -e "\\n[🎉] Nothing to fix!\\n"
     else
-      echo -e "\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
+      echo -e "\\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
       echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} settings fixed!"
-      echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\n"
+      echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\\n"
     fi
 
   elif [[ "${cmd}" == "list" ]]; then
