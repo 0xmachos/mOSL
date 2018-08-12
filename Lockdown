@@ -73,6 +73,7 @@ function macos_compatability_check {
                         | grep 'macOS ' \
                         | tail -n 1 \
                         | awk '{print $2" "$3}')"
+  # Extract the OS Name (e.g. Sierra) from System Information.app
   # This is fragile. The awk statement will need to be updated for each major release
   # e.g Currentrly assumes OS name has two words, next release (Mojave) only has one 
 
@@ -476,6 +477,8 @@ function check_efi_integrity {
   if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
     echo "  [⚠️ ] Check EFI Firmware Integrity ${RED}is not${RESET} supported by this Mac"
     audit_fails=$((audit_fails-1))
+    # Decrement the counter so that when this function fails on sysytem with T2 chips it doesn't
+    # count as a failure in the contect of printing the statistics 
     return 1 
   fi
   
