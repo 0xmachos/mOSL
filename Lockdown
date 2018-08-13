@@ -29,11 +29,11 @@ function usage {
   echo -e "\\n  Audit or Fix macOS security settings🔒🍎\\n"
   echo -e "  Usage: ./Lockdown [list | audit {setting_index} | fix {setting_index}]\\n"
 
-  echo "    list         - List settings that can be audited/ fixed 📝" 
-  echo "    audit        - Audit the status of all or chosen setting(s) (${BOLD}Does NOT change settings${RESET}) 🧐"
-  echo -e "    ${RED}fix${RESET}          - Attempt to fix all or chosen setting(s) (${BOLD}Does change settings${RESET})🛠 \\n"
-  echo "    ${RED}force-fix${RESET}    - Same as 'fix' however bypasses user confirmation prompt"
-  echo -e "                 Can be used to invoke Lockdown from other scripts\\n"
+  echo "    list         - List settings that can be audited/ fixed" 
+  echo "    audit        - Audit the status of all or chosen setting(s) (${BOLD}Does NOT change settings${RESET})"
+  echo -e "    ${RED}fix${RESET}          - Attempt to fix all or chosen setting(s) (${BOLD}Does change settings${RESET})\\n"
+  echo "    ${RED}fix-force${RESET}    - Same as 'fix' however bypasses user confirmation prompt"
+  echo -e "                   (Can be used to invoke Lockdown from other scripts)\\n"
 
   exit 0
 }
@@ -600,12 +600,12 @@ function main {
       shift # past value
       ;;
 
-    fix|force-fix)
-      fix_setting_num=${2:-""}
+    fix|fix-force)
+      fix_setting_num=${2:-0}
 
       check_index "${fix_setting_num}"
 
-      if [[ "${cmd}" != "force-fix" ]]; then
+      if [[ "${cmd}" != "fix-force" ]]; then
         # Confirm the user wants to run FIX mode
         # If "fix force" skip the prompt 
           get_fix_mode_permission
