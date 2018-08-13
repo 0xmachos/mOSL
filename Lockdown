@@ -648,11 +648,17 @@ function main {
       shift # past value
       ;;
 
-    usage|*)
-      echo -e "\\n  [❌] ${RED}Invalid command:${RESET} ${cmd}"
+    usage|help|-h|--help|🤷‍♂️|🤷‍♀️)
       usage
       shift
       ;;
+    
+    *)
+      echo -e "\\n  [❌] ${RED}Invalid command:${RESET} ${cmd}"
+      usage  
+      shift
+      ;;
+
   esac
 
 }
