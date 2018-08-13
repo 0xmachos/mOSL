@@ -539,6 +539,9 @@ function main {
   declare -i audit_fails=0
   declare -i no_fix_commands=0
   declare -i successful_fixes=0
+  declare -i setting_index=0
+  declare -i audit_setting_num
+  declare -i fix_setting_num
 
   settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry disable_firewall_builin_software disable_firewall_downloaded_signed\
@@ -550,7 +553,6 @@ function main {
   case "${cmd}" in
 
     list)
-      declare -i setting_index=0 
       echo -e "\\nSettings (${BOLD}${#settings[@]}${RESET}) that can be audited or fixed: "
       
       for setting in "${settings[@]}"; do
@@ -568,14 +570,14 @@ function main {
       ;;
 
     audit)
-      audit_setting_num=${2:-""}
+      audit_setting_num=${2:-0}
 
       check_index "${audit_setting_num}"
       sudo_prompt
 
       echo -e "\\nResults: "
       
-      if ! [[ -z "${audit_setting_num}"  ]]; then
+      if ! [ "${audit_setting_num}" -le 0 ]; then
         if ! "${settings[${audit_setting_num}]}" "audit"; then
         # Audit whichever setting has been passed to  
           audit_fails=$((audit_fails+1))
@@ -613,7 +615,7 @@ function main {
 
       echo -e "\\nResults: "
 
-      if ! [[ -z "${fix_setting_num}"  ]]; then
+      if ! [ "${fix_setting_num}" -le 0  ]; then
         if ! "${settings[${fix_setting_num}]}" "audit"; then
         # Audit whichever setting has been passed to  
           fix_fails=$((fix_fails+1))
