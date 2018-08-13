@@ -534,8 +534,8 @@ function main {
   macos_compatability_check
   # Check the system is running the supoorted version of macOS 
 
-  cmd=${1:-"usage"}
-  settings=()
+  declare -r cmd=${1:-"usage"}
+  declare -a settings
   declare -i audit_fails=0
   declare -i no_fix_commands=0
   declare -i successful_fixes=0
