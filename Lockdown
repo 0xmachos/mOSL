@@ -159,7 +159,7 @@ function get_fix_mode_permission {
     return 0
   
   else
-    echo "[❌] ${USER} has chosen to quit"
+    echo "[❌] ${USER} has chosen to quit!"
     exit 1
   fi
 }
@@ -177,8 +177,8 @@ function verify_signature {
     fi
 
   else
-    echo "[⚠️ ] Unable to verify Lockdown signature as minisign is not installed"
-    echo "[🍺] brew install minisign"
+    echo "[⚠️ ] ${BOLD}Unable to verify Lockdown signature${RESET} as minisign is not installed"
+    echo -e "[🍺] brew install minisign\\n"
   fi
 }
 
