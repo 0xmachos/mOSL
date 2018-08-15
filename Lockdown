@@ -48,6 +48,7 @@ function usage {
 # verify_signature
 # check_index
 # sudo_prompt
+# ctrl_c
 
 
 function macos_compatability_check {
@@ -209,6 +210,12 @@ function sudo_prompt {
   sudo --prompt="[⚠️ ] Password required to run some commands with 'sudo': " -v
   # Aquire sudo privlidges now so we can show a custom prompt
   # -v updates the user's cached credentials, does not run a command
+}
+
+
+function ctrl_c {
+        echo -e "\\n[❌] ${USER} has chosen to quit!"
+        exit 1
 }
 
 
@@ -551,6 +558,7 @@ function main {
                   set_airdrop_contacts_only set_appstore_update_check_daily check_sip check_kext_loading_consent \
                   check_efi_integrity check_filevault check_firmware_password_set)
 
+  trap ctrl_c SIGINT
 
   case "${cmd}" in
 
