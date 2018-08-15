@@ -187,16 +187,18 @@ function check_index {
   # Check that index supplied to audit/ fix isn't greater than the number of entries in settings 
 
   local setting_num=${1:-0}
+  local -i max_setting_num
+  max_setting_num=$(( "${#settings[@]}" - 1 ))
 
-  if ! [[ "${setting_num}" =~ ^[0-9]+$ ]] ; then
+  if ! [[ "${setting_num}" =~ ^-?[0-9]+$ ]] ; then
    echo -e "\\n  [❌] ${setting_num} ${RED}is not an integer!${RESET}"
-   echo "  [⚠️ ] Pick a setting between 1 and ${#settings[@]}"
+   echo "  [⚠️ ] Pick a setting between 1 and ${max_setting_num}"
    exit 1
   fi
 
-  if [ "${setting_num}" -gt "${#settings[@]}" ]; then
+  if [ "${setting_num}" -gt "${max_setting_num}" ]; then
     echo -e "\\n  [❌] ${RED}No setting with index of ${setting_num}${RESET}" 
-    echo "  [⚠️ ] Pick a setting between 1 and ${#settings[@]}"
+    echo "  [⚠️ ] Pick a setting between 1 and ${max_setting_num}"
     exit 1
   fi
 }
@@ -539,9 +541,9 @@ function main {
   declare -i audit_fails=0
   declare -i no_fix_commands=0
   declare -i successful_fixes=0
-  declare -i setting_index=0
   declare -i audit_setting_num
   declare -i fix_setting_num
+  declare -i setting_index=-1
 
   settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry disable_firewall_builin_software disable_firewall_downloaded_signed\
@@ -570,14 +572,14 @@ function main {
       ;;
 
     audit)
-      audit_setting_num=${2:-0}
+      audit_setting_num=${2:--1}
 
       check_index "${audit_setting_num}"
       sudo_prompt
 
       echo -e "\\nResults: "
       
-      if ! [ "${audit_setting_num}" -le 0 ]; then
+      if ! [ "${audit_setting_num}" -lt 0 ]; then
         if ! "${settings[${audit_setting_num}]}" "audit"; then
         # Audit whichever setting has been passed to  
           audit_fails=$((audit_fails+1))
@@ -603,7 +605,7 @@ function main {
       ;;
 
     fix|fix-force)
-      fix_setting_num=${2:-0}
+      fix_setting_num=${2:--1}
 
       check_index "${fix_setting_num}"
 
@@ -615,7 +617,7 @@ function main {
 
       echo -e "\\nResults: "
 
-      if ! [ "${fix_setting_num}" -le 0  ]; then
+      if ! [ "${fix_setting_num}" -lt 0  ]; then
         if ! "${settings[${fix_setting_num}]}" "audit"; then
         # Audit whichever setting has been passed to  
           fix_fails=$((fix_fails+1))
