@@ -657,7 +657,7 @@ function main {
     
     *)
       echo -e "\\n  [❌] ${RED}Invalid command:${RESET} ${cmd}"
-      usage  
+      exit 1  
       shift
       ;;
 
