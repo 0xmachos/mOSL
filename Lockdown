@@ -577,6 +577,7 @@ function main {
       echo ""
       shift # past argument
       shift # past value
+      exit 0
       ;;
 
     audit)
@@ -605,6 +606,7 @@ function main {
 
       if [ "${audit_fails}" -le 0 ]; then
         echo -e "\\n  [🎉] All settings passed!"
+        exit 0
       else
         echo -e "\\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\\n"
       fi
@@ -648,6 +650,7 @@ function main {
 
       if [ "${audit_fails}" -le 0 ]; then
         echo -e "\\n  [🎉] Nothing to fix!\\n"
+        exit 0
       else
         echo -e "\\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
         echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} settings fixed!"
