@@ -305,6 +305,22 @@ function enable_terminal_secure_entry {
 }
 
 
+function enable_sip {
+
+  local mode=${1:?No mode passed}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="Enable System Integrity Protection (SIP)"
+
+  audit_command="csrutil status | grep -q 'enabled'"
+  fix_command="sudo csrutil clear >/dev/null"
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function disable_firewall_builin_software {
 
   local mode=${1:?No mode passed}
@@ -444,22 +460,6 @@ function set_appstore_update_check_daily {
 }
 
 
-function check_sip {
-
-  local mode=${1:?No mode passed}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Check SIP enabled"
-
-  audit_command="csrutil status | grep -q 'enabled'"
-  fix_command="sudo csrutil clear >/dev/null"
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
 function check_kext_loading_consent {
 
   local mode=${1:?No mode passed}
@@ -553,9 +553,9 @@ function main {
   declare fix_setting_num
 
   settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
-                  enable_terminal_secure_entry disable_firewall_builin_software disable_firewall_downloaded_signed\
+                  enable_terminal_secure_entry enable_sip disable_firewall_builin_software disable_firewall_downloaded_signed\
                   disable_ipv6 disable_mail_remote_content disable_remote_apple_events disable_remote_login \
-                  set_airdrop_contacts_only set_appstore_update_check_daily check_sip check_kext_loading_consent \
+                  set_airdrop_contacts_only set_appstore_update_check_daily check_kext_loading_consent \
                   check_efi_integrity check_filevault check_firmware_password_set)
 
   trap ctrl_c SIGINT
