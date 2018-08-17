@@ -189,7 +189,7 @@ function check_index {
 
   local setting_num=${1:-0}
   local -i max_setting_num
-  max_setting_num=$(( "${#settings[@]}" - 1 ))
+  max_setting_num=$(( ${#settings[@]} - 1 ))
 
   if ! [[ "${setting_num}" =~ ^-?[0-9]+$ ]] ; then
    echo -e "\\n  [❌] ${setting_num} ${RED}is not an integer!${RESET}"
