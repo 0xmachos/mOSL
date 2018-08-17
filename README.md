@@ -18,14 +18,18 @@ Install via [brew](https://brew.sh/): `brew install minisign`
 ## Usage
 
 ```
-$ ./Lockdown
+$ ./Lockdown 
 
-Audit or Fix macOS security settings🔒🍎
+  Audit or Fix macOS security settings🔒🍎
 
-Usage:
-  list         - List all settings that can be audited/ fixed
-  audit        - Audit the status of all settings (Does NOT change settings)
-  fix  {force} - Attempt to fix all settings (Does change settings)
+  Usage: ./Lockdown [list | audit {setting_index} | fix {setting_index}]
+
+    list         - List settings that can be audited/ fixed
+    audit        - Audit the status of all or chosen setting(s) (Does NOT change settings)
+    fix          - Attempt to fix all or chosen setting(s) (Does change settings)
+
+    fix-force    - Same as 'fix' however bypasses user confirmation prompt
+                   (Can be used to invoke Lockdown from other scripts)
 ```
 
 ## Settings
