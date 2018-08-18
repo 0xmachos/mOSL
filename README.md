@@ -36,22 +36,22 @@ $ ./Lockdown
 
 Settings that can be audited/ fixed:
 ```
-enable automatic updates
-enable gatekeeper
-enable firewall
-enable admin password preferences
-enable terminal secure entry
-disable firewall builin software
-disable firewall downloaded signed
-disable ipv6
-disable mail remote content
-disable remote apple events
-disable remote login
-set airdrop contacts only
-set appstore update check daily
-check SIP
-check kext loading consent
-check EFI integrity
-check filevault
-check firmware password set
+  [0] enable automatic updates
+  [1] enable gatekeeper
+  [2] enable firewall
+  [3] enable admin password preferences
+  [4] enable terminal secure entry
+  [5] enable sip
+  [6] disable firewall builin software
+  [7] disable firewall downloaded signed
+  [8] disable ipv6
+  [9] disable mail remote content
+  [10] disable remote apple events
+  [11] disable remote login
+  [12] set airdrop contacts only
+  [13] set appstore update check daily
+  [14] check kext loading consent
+  [15] check efi integrity
+  [16] check filevault
+  [17] check firmware password set
 ```
