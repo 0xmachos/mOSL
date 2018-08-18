@@ -659,7 +659,10 @@ function main {
       else
         echo -e "\\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
         echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} settings fixed!"
-        echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\\n"
+        
+        if [ "${no_fix_commands}" -gt 0 ]; then
+          echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} settings can't be programmatically fixed 😢\\n"
+        fi
       fi
 
       shift # past argument
