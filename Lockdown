@@ -321,6 +321,52 @@ function enable_sip {
 }
 
 
+function enable_filevault {
+
+  local mode=${1:?No mode passed}
+  local title
+  local audit_command
+  local fix_command
+  local permission="n"
+  
+  title="Enable FileVault"
+
+  audit_command="fdesetup status | grep -q 'On'"
+  fix_command="sudo fdesetup enable -user $USER > $HOME/FileVault_recovery_key.txt"
+
+
+  if [[ "${mode}" == "fix" ]]; then
+
+    if ! diskutil info / | grep 'File System Personality:' | grep -q 'APFS'; then
+      # Only offer to enable if the filesystem is APFS 
+      return 1
+    elif [[ "${cmd}" == "fix-force" ]]; then
+      # Exit if Lockdown invoked with fix-force
+      # Enabling FDE should be explicit, don't want anyone to do this by accident
+      echo "  [⚠️ ] ${BOLD}Didn't fix${RESET}: ${title}" 
+      return 1
+    fi
+
+    echo -en "\\n  [⚠️ ] Do you want to ${RED}enable FileVault?${RESET} (y/${BOLD}N${RESET}) "
+    read -r permission
+
+    if [[ "${permission}" =~ ^(y|Y)$ ]]; then
+      
+      echo "  [✅] ${USER} has chosen to enable FileVault"
+      echo -e "  [⚠️ ] Recovery key saved to $HOME/FileVault_recovery_key.txt\\n"
+     return 0
+
+    else
+      echo "  [❌] ${USER} has chosen ${BOLD}not${RESET} to enable FileVault"
+      echo -e "  [⚠️ ] Enable manually: System Preferences > Security & Privacy > FileVault\\n"
+      return 1
+    fi
+  fi
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 function disable_firewall_builin_software {
 
   local mode=${1:?No mode passed}
@@ -501,22 +547,6 @@ function check_efi_integrity {
 }
 
 
-function check_filevault {
-
-  local mode=${1:?No mode passed}
-  local title
-  local audit_command
-  local fix_command
-  
-  title="Check FileVault enabled"
-
-  audit_command="fdesetup status | grep -q 'On'"
-  fix_command=""
-
-  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
-}
-
-
 function check_firmware_password_set {
 
   local mode=${1:?No mode passed}
@@ -553,10 +583,11 @@ function main {
   declare fix_setting_num
 
   settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
-                  enable_terminal_secure_entry enable_sip disable_firewall_builin_software disable_firewall_downloaded_signed\
+                  enable_terminal_secure_entry enable_sip enable_filevault \
+                  disable_firewall_builin_software disable_firewall_downloaded_signed\
                   disable_ipv6 disable_mail_remote_content disable_remote_apple_events disable_remote_login \
-                  set_airdrop_contacts_only set_appstore_update_check_daily check_kext_loading_consent \
-                  check_efi_integrity check_filevault check_firmware_password_set)
+                  set_airdrop_contacts_only set_appstore_update_check_daily \
+                  check_kext_loading_consent check_efi_integrity check_firmware_password_set)
 
   trap ctrl_c SIGINT
 
