@@ -432,7 +432,7 @@ function set_airdrop_contacts_only {
   local audit_command
   local fix_command
   
-  title="AirDrop Discoverability: 'Contacts Only' or 'No One'"
+  title="Set AirDrop Discoverability to 'Contacts Only'"
 
   audit_command="if defaults read com.apple.sharingd DiscoverableMode 2>/dev/null | grep -q 'Contacts Only'; then exit 0; elif defaults read com.apple.sharingd DiscoverableMode 2>/dev/null | grep -q 'Off'; then exit 0; else exit 1; fi"
 
