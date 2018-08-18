@@ -628,9 +628,14 @@ function main {
       echo -e "\\nResults: "
 
       if ! [ "${fix_setting_num}" -lt 0  ]; then
+
         if ! "${settings[${fix_setting_num}]}" "audit"; then
         # Audit whichever setting has been passed to  
-          fix_fails=$((fix_fails+1))
+          audit_fails=$((audit_fails+1))
+
+          if "${settings[${fix_setting_num}]}" "fix"; then
+            successful_fixes=$((successful_fixes+1))
+          fi
         fi
       else
 
