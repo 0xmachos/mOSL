@@ -629,6 +629,7 @@ function main {
                   check_kext_loading_consent check_efi_integrity check_firmware_password_set check_if_standard_user)
 
   trap ctrl_c SIGINT
+  # Detect and react to the user hitting CTRL + C
 
   case "${cmd}" in
 
