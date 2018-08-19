@@ -585,6 +585,22 @@ function check_firmware_password_set {
 }
 
 
+function check_if_standard_user {
+
+  local mode=${1:?No mode passed}
+  local title
+  local audit_command
+  local fix_command
+  
+  title="${USER} is a standard user not an administrator"
+
+  audit_command="groups | grep -qv 'admin'"
+  fix_command=""
+
+  mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
+}
+
+
 ############################ 
 
 
@@ -610,7 +626,7 @@ function main {
                   disable_firewall_builin_software disable_firewall_downloaded_signed\
                   disable_ipv6 disable_mail_remote_content disable_remote_apple_events disable_remote_login \
                   set_airdrop_contacts_only set_appstore_update_check_daily \
-                  check_kext_loading_consent check_efi_integrity check_firmware_password_set)
+                  check_kext_loading_consent check_efi_integrity check_firmware_password_set check_if_standard_user)
 
   trap ctrl_c SIGINT
 
