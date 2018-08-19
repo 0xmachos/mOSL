@@ -49,6 +49,7 @@ function usage {
 # check_index
 # sudo_prompt
 # ctrl_c
+# debug
 
 
 function macos_compatability_check {
@@ -216,6 +217,27 @@ function sudo_prompt {
 function ctrl_c {
         echo -e "\\n[❌] ${USER} has chosen to quit!"
         exit 1
+}
+
+
+function debug {
+
+  local is_admin="False"
+
+  if groups | grep -q 'admin'; then
+    is_admin="True"
+  else
+    is_admin_bool="False"
+  fi
+
+  echo -e "\\n${RED}Debug information:${RESET} \\n"
+
+  echo "      mOSL Version:   ${LOCKDOWN_VERSION}"
+  system_profiler SPSoftwareDataType | grep 'Version'
+  echo "      Is admin:       ${is_admin}"
+  echo ""
+
+  exit 0
 }
 
 
@@ -699,6 +721,11 @@ function main {
 
       shift # past argument
       shift # past value
+      ;;
+
+    debug)
+      debug
+      shift
       ;;
 
     usage|help|-h|--help|🤷‍♂️|🤷‍♀️)
