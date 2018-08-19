@@ -42,16 +42,17 @@ Settings that can be audited/ fixed:
   [3] enable admin password preferences
   [4] enable terminal secure entry
   [5] enable sip
-  [6] disable firewall builin software
-  [7] disable firewall downloaded signed
-  [8] disable ipv6
-  [9] disable mail remote content
-  [10] disable remote apple events
-  [11] disable remote login
-  [12] set airdrop contacts only
-  [13] set appstore update check daily
-  [14] check kext loading consent
-  [15] check efi integrity
-  [16] check filevault
+  [6] enable filevault
+  [7] disable firewall builin software
+  [8] disable firewall downloaded signed
+  [9] disable ipv6
+  [10] disable mail remote content
+  [11] disable remote apple events
+  [12] disable remote login
+  [13] set airdrop contacts only
+  [14] set appstore update check daily
+  [15] check kext loading consent
+  [16] check efi integrity
   [17] check firmware password set
+  [18] check if standard user
 ```
