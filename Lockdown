@@ -574,6 +574,7 @@ function main {
   # Check the system is running the supoorted version of macOS 
 
   declare -r cmd=${1:-"usage"}
+  declare -r LOCKDOWN_VERSION="1.8.0" 
   declare -a settings
   declare -i audit_fails=0
   declare -i no_fix_commands=0
