@@ -227,7 +227,7 @@ function debug {
   if groups | grep -q 'admin'; then
     is_admin="True"
   else
-    is_admin_bool="False"
+    is_admin="False"
   fi
 
   echo -e "\\n${RED}Debug information:${RESET} \\n"
