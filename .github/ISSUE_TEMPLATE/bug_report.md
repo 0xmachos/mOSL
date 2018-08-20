@@ -6,11 +6,10 @@ about: Create a report to help us improve
 
 **_Only_ bugs related to the latest macOS release, High Sierra (`10.13.x`), will be fixed**
 
-**macOS**
-- Version: `10.13.x`
+Output of `./Lockdown debug`: 
+```
 
-**Lockdown**
-- Version: `v1.6.0`
+```
 
 **Describe the bug**
 
