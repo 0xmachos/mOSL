@@ -4,6 +4,7 @@
 Bash script to audit and fix macOS High Sierra (`10.13.x`) security settings
 
 ## Warnings
+- **Always** run the [latest release](https://github.com/0xmachos/mOSL/releases/latest) **not** the code in `master`!
 - This script will **only ever** support the _latest_ macOS release  
 - This script requires your **password** to invoke some commands with `sudo`  
 
