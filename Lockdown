@@ -267,7 +267,7 @@ function enable_gatekeeper {
   local audit_command
   local fix_command
   
-  title="Enable Gatekeeper "
+  title="Enable Gatekeeper"
 
   audit_command='spctl --status | grep -q "assessments enabled"'
   fix_command='sudo spctl --master-enable'
