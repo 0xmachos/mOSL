@@ -369,7 +369,7 @@ function enable_filevault {
       return 1
     fi
 
-    echo -en "\\n  [⚠️ ] Do you want to ${RED}enable FileVault?${RESET} (y/${BOLD}N${RESET}) "
+    echo -en "\\n  [⚠️ ] Do you want to ${RED}enable FileVault${RESET}? (y/${BOLD}N${RESET}) "
     read -r permission
 
     if [[ "${permission}" =~ ^(y|Y)$ ]]; then
@@ -379,8 +379,7 @@ function enable_filevault {
      return 0
 
     else
-      echo "  [❌] ${USER} has chosen ${BOLD}not${RESET} to enable FileVault"
-      echo -e "  [⚠️ ] Enable manually: System Preferences > Security & Privacy > FileVault\\n"
+      echo -e "  [❌] ${USER} has chosen ${BOLD}not${RESET} to enable FileVault\\n"
       return 1
     fi
   fi
