@@ -609,7 +609,7 @@ function check_if_standard_user {
   local audit_command
   local fix_command
   
-  title="${USER} is a standard user not an administrator"
+  title="${USER} is not an administrator"
 
   audit_command="groups | grep -qv 'admin'"
   fix_command=""
