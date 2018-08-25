@@ -376,7 +376,6 @@ function enable_filevault {
       
       echo "  [✅] ${USER} has chosen to enable FileVault"
       echo -e "  [⚠️ ] Recovery key saved to $HOME/FileVault_recovery_key.txt\\n"
-     return 0
 
     else
       echo -e "  [❌] ${USER} has chosen ${BOLD}not${RESET} to enable FileVault\\n"
