@@ -567,17 +567,36 @@ function check_efi_integrity {
 }
 
 
-function check_firmware_password_set {
+function set_firmware_password {
 
   local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
+  local permission="n"
   
-  title="Check firmware password set"
-
+  title="Set a firmware password"
   audit_command="sudo firmwarepasswd -check | grep -q 'Yes'"
-  fix_command=""
+  fix_command="sudo firmwarepasswd -setpasswd"
+
+  if [[ "${mode}" == "fix" ]]; then
+    
+    echo -en "\\n  [⚠️ ] Do you want to ${RED}set a Firmware password?${RESET} (y/${BOLD}N${RESET}) "
+    read -r permission
+
+    if [[ "${permission}" =~ ^(y|Y)$ ]]; then
+      echo "  [✅] ${USER} has chosen to set a firmware password"
+    else
+      echo "  [❌] ${USER} has chosen ${BOLD}not${RESET} to set a firmware password"
+      return 1
+    fi
+
+  elif [[ "${cmd}" == "fix-force" ]]; then
+    # Exit if Lockdown invoked with fix-force
+    # Enabling FDE should be explicit, don't want anyone to do this by accident
+    echo "  [⚠️ ] ${BOLD}Didn't fix${RESET}: ${title}" 
+    return 1
+  fi
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
@@ -623,8 +642,8 @@ function main {
                   enable_terminal_secure_entry enable_sip enable_filevault \
                   disable_firewall_builin_software disable_firewall_downloaded_signed\
                   disable_ipv6 disable_mail_remote_content disable_remote_apple_events disable_remote_login \
-                  set_airdrop_contacts_only set_appstore_update_check_daily \
-                  check_kext_loading_consent check_efi_integrity check_firmware_password_set check_if_standard_user)
+                  set_airdrop_contacts_only set_appstore_update_check_daily set_firmware_password \
+                  check_kext_loading_consent check_efi_integrity check_if_standard_user)
 
   trap ctrl_c SIGINT
   # Detect and react to the user hitting CTRL + C
