@@ -587,7 +587,7 @@ function set_firmware_password {
     if [[ "${permission}" =~ ^(y|Y)$ ]]; then
       echo "  [✅] ${USER} has chosen to set a firmware password"
     else
-      echo "  [❌] ${USER} has chosen ${BOLD}not${RESET} to set a firmware password"
+      echo -e "  [❌] ${USER} has chosen ${BOLD}not${RESET} to set a firmware password\\n"
       return 1
     fi
 
