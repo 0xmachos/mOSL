@@ -580,6 +580,13 @@ function set_firmware_password {
   fix_command="sudo firmwarepasswd -setpasswd"
 
   if [[ "${mode}" == "fix" ]]; then
+
+    if [[ "${cmd}" == "fix-force" ]]; then
+      # Exit if Lockdown invoked with fix-force
+      # Enabling FDE should be explicit, don't want anyone to do this by accident
+      echo "  [⚠️ ] ${BOLD}Didn't fix${RESET}: ${title}" 
+      return 1
+    fi
     
     echo -en "\\n  [⚠️ ] Do you want to ${RED}set a Firmware password?${RESET} (y/${BOLD}N${RESET}) "
     read -r permission
@@ -590,12 +597,6 @@ function set_firmware_password {
       echo -e "  [❌] ${USER} has chosen ${BOLD}not${RESET} to set a firmware password\\n"
       return 1
     fi
-
-  elif [[ "${cmd}" == "fix-force" ]]; then
-    # Exit if Lockdown invoked with fix-force
-    # Enabling FDE should be explicit, don't want anyone to do this by accident
-    echo "  [⚠️ ] ${BOLD}Didn't fix${RESET}: ${title}" 
-    return 1
   fi
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
