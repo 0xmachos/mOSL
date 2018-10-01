@@ -74,10 +74,10 @@ function macos_compatability_check {
   current_macos_name="$(strings '/Applications/Utilities/System Information.app/Contents/MacOS/System Information' \
                         | grep 'macOS ' \
                         | tail -n 1 \
-                        | awk '{print $2" "$3}')"
-  # Extract the OS Name (e.g. Sierra) from System Information.app
+                        | awk '{print $2}')"
+  # Extract the OS Name (e.g. Mojave) from System Information.app
   # This is fragile. The awk statement will need to be updated for each major release
-  # e.g Currentrly assumes OS name has two words, next release (Mojave) only has one 
+  # e.g Currentrly assumes OS name has one word, next release might have more 
 
   if [ "${current_macos_version}" != "${supported_macos_version}" ]; then 
     echo "[❌] Lockdown was built for macOS ${supported_macos_name} (${supported_macos_version}.x)"
