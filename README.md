@@ -8,6 +8,18 @@ Bash script to audit and fix macOS Mojave (`10.14.x`) security settings
 - This script will **only ever** support the _latest_ macOS release  
 - This script requires your **password** to invoke some commands with `sudo`  
 
+## Mojave Permissions
+
+In order to audit/ fix `disable mail remote content` `Terminal.app` needs to read from and write to `com.apple.mail-shared.plist`. Mojave requires that `Terminal.app` be given the `Full Disk Access` permission to access this file as files related to `Mail.app` are now a protected. 
+
+It is not possible to programatically get or prompt for this permission, it must be manually given by the user.
+
+To give `Terminal.app` `Full Disk Access`:
+
+`System Preferences` > `Security & Privacy` > `Privacy` > `Full Disk Access` > Add `Terminal.app`
+
+This is *currently* the **only** setting which requires the `Full Disk Access` permission.   
+
 ## Verification
 
 The executable `Lockdown` file can be verified with [Minisign](https://jedisct1.github.io/minisign/):
