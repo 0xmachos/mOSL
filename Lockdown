@@ -224,11 +224,14 @@ function ctrl_c {
 function debug {
 
   local is_admin="False"
+  local has_full_disk_access="False"
 
   if groups | grep -q 'admin'; then
     is_admin="True"
-  else
-    is_admin="False"
+  fi
+
+  if full_disk_access_check; then
+    has_full_disk_access="True"
   fi
 
   echo -e "\\n${RED}Debug information:${RESET} \\n"
@@ -236,6 +239,7 @@ function debug {
   echo "      mOSL Version:   ${LOCKDOWN_VERSION}"
   system_profiler SPSoftwareDataType | grep 'Version'
   echo "      Is admin:       ${is_admin}"
+  echo "      Full Disk Access: ${has_full_disk_access}"
   echo ""
 
   exit 0
