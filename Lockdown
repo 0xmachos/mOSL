@@ -249,7 +249,7 @@ function debug {
 
 function full_disk_access_check {
 
-  if defaults read com.apple.mail-shared >/dev/null 2>&1; then 
+  if [ -r "/$HOME/Library/Mail" ]; then
     return 0
   else
     return 1
