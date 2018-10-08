@@ -391,7 +391,7 @@ function enable_filevault {
     if [[ "${permission}" =~ ^(y|Y)$ ]]; then
       
       echo "  [✅] ${USER} has chosen to enable FileVault"
-      echo -e "  [⚠️ ] Recovery key saved to $HOME/FileVault_recovery_key.txt\\n"
+      echo -e "  [⚠️ ] Recovery key saved to ${RED}$HOME/FileVault_recovery_key.txt${RESET}\\n"
 
     else
       echo -e "  [❌] ${USER} has chosen ${BOLD}not${RESET} to enable FileVault\\n"
