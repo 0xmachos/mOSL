@@ -57,6 +57,8 @@ $ ./Lockdown
 
 ## Settings
 
+See [`Commands.md`](https://github.com/0xmachos/mOSL/blob/master/Commands.md) for a easy to read list of commands used to `audit`/ `fix` the below settings.
+
 Settings that can be audited/ fixed:
 ```
   [0] enable automatic updates
