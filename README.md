@@ -8,6 +8,16 @@ Bash script to audit and fix macOS Mojave (`10.14.x`) security settings
 - This script will **only ever** support the _latest_ macOS release  
 - This script requires your **password** to invoke some commands with `sudo`  
 
+## Threat Model(ish) 
+
+The main goal is to enforce already secure defaults and apply more strict non-default options. 
+
+It aims to reduce attack surface but it is pragmatic in this pursuit. The author utilises Bluetooth for services such as Handoff so it is left enabled.
+
+There is **no specific focus** on enhancing privacy. 
+
+Finally, mOSL will not protect you from the [FSB](https://en.wikipedia.org/wiki/Federal_Security_Service), [MSS](https://en.wikipedia.org/wiki/Ministry_of_State_Security_(China)), [DGSE](https://en.wikipedia.org/wiki/Directorate-General_for_External_Security), or [FSM](https://en.wikipedia.org/wiki/Flying_Spaghetti_Monster).
+
 ## Mojave Permissions
 
 In order to audit/ fix `disable mail remote content` `Terminal.app` needs to read from and write to `com.apple.mail-shared.plist`. Mojave requires that `Terminal.app` be given the `Full Disk Access` permission to access this file as files related to `Mail.app` are now a protected. 
