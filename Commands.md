@@ -24,7 +24,7 @@ spctl --status | grep -q "assessments enabled"
 
 ### Fix 
 ```
-sudo spctl --master-enable'
+sudo spctl --master-enable
 ```
 
 ## Enable Firewall
