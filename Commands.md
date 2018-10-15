@@ -174,9 +174,9 @@ sudo systemsetup -f -setremotelogin off
 
 ### Audit
 ```
-if defaults read com.apple.sharingd DiscoverableMode 2>/dev/null | grep -q 'Contacts Only'; then 
+if defaults read com.apple.sharingd DiscoverableMode | grep -q 'Contacts Only'; then 
   exit 0
-elif defaults read com.apple.sharingd DiscoverableMode 2>/dev/null | grep -q 'Off'; then 
+elif defaults read com.apple.sharingd DiscoverableMode | grep -q 'Off'; then 
   exit 0
 else 
   exit 1
@@ -193,7 +193,7 @@ sudo killall -HUP sharingd"
 
 ### Audit
 ```
-defaults read com.apple.SoftwareUpdate ScheduleFrequency 2>/dev/null | grep -q '1'
+defaults read com.apple.SoftwareUpdate ScheduleFrequency | grep -q '1'
 ```
 
 ### Fix 
