@@ -60,10 +60,8 @@ function macos_compatability_check {
   # Check if the Mac is running the supoorted version of macOS 
 
   local -r supported_macos_version="10.14"
-  local -r supported_macos_name="Mojave"
   local os
   local current_macos_version
-  local current_macos_name
 
   os="$(uname -s)"
 
@@ -73,17 +71,10 @@ function macos_compatability_check {
   fi
 
   current_macos_version="$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')";
-  current_macos_name="$(strings '/Applications/Utilities/System Information.app/Contents/MacOS/System Information' \
-                        | grep 'macOS ' \
-                        | tail -n 1 \
-                        | awk '{print $2}')"
-  # Extract the OS Name (e.g. Mojave) from System Information.app
-  # This is fragile. The awk statement will need to be updated for each major release
-  # e.g Currentrly assumes OS name has one word, next release might have more 
 
   if [ "${current_macos_version}" != "${supported_macos_version}" ]; then 
-    echo "[❌] Lockdown was built for macOS ${supported_macos_name} (${supported_macos_version}.x)"
-    echo "[🍺] This is macOS ${current_macos_name} (${current_macos_version})"
+    echo "[❌] Lockdown was built for macOS ${supported_macos_version}.x"
+    echo "[🍺] This is macOS ${current_macos_version}"
     exit 1
   fi
 }
