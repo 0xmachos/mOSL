@@ -165,7 +165,7 @@ function verify_signature {
 
   if [ -x "$(command -v minisign)" ]; then
 
-    if ! minisign -Vm ./Lockdown -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null; then 
+    if ! minisign -Vm ./Lockdown -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
       echo "[❌] Failed to validate Lockdown signature with minisign"
       exit 1
     fi
