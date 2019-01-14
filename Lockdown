@@ -46,6 +46,7 @@ function usage {
 # fix
 # mode_check
 # get_fix_mode_permission
+# follow_symlink
 # verify_signature
 # check_index
 # sudo_prompt
@@ -159,13 +160,47 @@ function get_fix_mode_permission {
 }
 
 
+function follow_symlink {
+
+  # If Lockdown is symlinked in $PATH
+  # Follow the symlink(s) to the real location of Lockdown
+  # This is required for Minisign to verify the signature
+
+  base=$(basename "${0}")
+  # Lockdown
+  source="${BASH_SOURCE[0]}"
+  # /x/y/z/Lockdown
+  while [ -h "${source}" ]; do
+    # While $source is a symlink
+    dir="$(cd -P "$(dirname "${source}")" && pwd)"
+    # Get directory of $source
+    # cd into dir of $source and run `pwd`
+    source="$(readlink "${source}")"
+    # get target of $source symlink 
+    
+    if [[ "${source}" != /* ]]; then 
+      source="${dir}/${source}"
+    fi
+  
+  done
+  parent=$(dirname "${source}")
+  # get directory of $source
+  path="$(cd -P "${parent}" && pwd)/${base}"
+  # Build path to Lockdown
+}
+
+
 function verify_signature {
   
   # Verify Lockdown signature with minisign
 
+  local path
+
+  follow_symlink
+
   if [ -x "$(command -v minisign)" ]; then
 
-    if ! minisign -Vm ./Lockdown -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
+    if ! minisign -Vm "${path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
       echo "[❌] Failed to validate Lockdown signature with minisign"
       exit 1
     fi
