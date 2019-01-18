@@ -77,10 +77,11 @@ Settings that can be audited/ fixed:
   [10] disable mail remote content
   [11] disable remote apple events
   [12] disable remote login
-  [13] set airdrop contacts only
-  [14] set appstore update check daily
-  [15] check kext loading consent
-  [16] check efi integrity
-  [17] check firmware password set
-  [18] check if standard user
+  [13] disable auto open safe downloads
+  [14] set airdrop contacts only
+  [15] set appstore update check daily
+  [16] set firmware password
+  [17] check kext loading consent
+  [18] check efi integrity
+  [19] check if standard user
 ```
