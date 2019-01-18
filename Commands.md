@@ -170,6 +170,18 @@ sudo systemsetup -getremotelogin | grep -q 'Remote Login: Off'
 sudo systemsetup -f -setremotelogin off
 ```
 
+## Disable Safari Auto Open 'safe' Files
+
+### Audit
+``` 
+defaults read com.apple.Safari AutoOpenSafeDownloads | grep -q '0'
+```
+
+### Fix 
+```
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+```
+
 ## Set AirDrop Discoverability to 'Contacts Only'
 
 ### Audit
