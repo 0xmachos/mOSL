@@ -45,7 +45,7 @@ $ ./Lockdown
 
   Audit or Fix macOS security settings🔒🍎
 
-  Usage: ./Lockdown [list | audit {setting_index} | fix {setting_index}]
+  Usage: ./Lockdown [list | audit {setting_index} | fix {setting_index} | debug]
 
     list         - List settings that can be audited/ fixed
     audit        - Audit the status of all or chosen setting(s) (Does NOT change settings)
@@ -53,6 +53,9 @@ $ ./Lockdown
 
     fix-force    - Same as 'fix' however bypasses user confirmation prompt
                    (Can be used to invoke Lockdown from other scripts)
+
+    debug        - Print debug info for troubleshooting
+
 ```
 
 ## Settings
