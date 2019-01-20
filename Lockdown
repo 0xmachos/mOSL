@@ -286,18 +286,20 @@ function full_disk_access_check {
 ### END UTILITY FUNCTIONS ###
 
 
-function enable_automatic_updates {
+function enable_automatic_system_updates {
 
   local mode=${1:?No mode passed}
   local title
   local audit_command
   local fix_command
   
-  title="Enable Automatic Updates"
+  title="Enable Automatic System Updates"
 
-  audit_command="sudo softwareupdate --schedule | grep -q 'Automatic check is on'"
-  fix_command="sudo softwareupdate --schedule on"
-
+  # shellcheck disable=SC2016
+  audit_command='if ! defaults read "/Library/Preferences/com.apple.SoftwareUpdate.plist" "AutomaticallyInstallMacOSUpdates" >/dev/null 2>&1; then exit 1; fi; defaults read "/Library/Preferences/com.apple.SoftwareUpdate.plist" AutomaticallyInstallMacOSUpdates | grep -q "1"'
+  # shellcheck disable=SC2016
+  fix_command='declare -a keys; keys=(AutomaticCheckEnabled AutomaticDownload AutomaticallyInstallMacOSUpdates ConfigDataInstall CriticalUpdateInstall); for key in "${keys[@]}"; do sudo defaults write "/Library/Preferences/com.apple.SoftwareUpdate.plist" "${key}" -bool true; done'
+  
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
 }
 
@@ -704,7 +706,7 @@ function main {
   declare audit_setting_num
   declare fix_setting_num
 
-  settings=(enable_automatic_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
+  settings=(enable_automatic_system_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry enable_sip enable_filevault \
                   disable_firewall_builin_software disable_firewall_downloaded_signed \
                   disable_ipv6 disable_mail_remote_content disable_remote_apple_events disable_remote_login \
