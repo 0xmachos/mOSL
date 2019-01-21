@@ -346,7 +346,6 @@ function enable_firewall {
   title="Enable Firewall"
 
   audit_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw  --getglobalstate | grep -q 'enabled'"
-  
   fix_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on >/dev/null"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -363,7 +362,6 @@ function enable_admin_password_preferences {
   title="Require an administrator password to access system-wide preferences"
 
   audit_command="security -q authorizationdb read system.preferences | grep -A1 'shared' | grep -q 'false'"
-  
   fix_command="security -q authorizationdb read system.preferences > /tmp/system.preferences.plist; /usr/libexec/PlistBuddy -c 'Set :shared false' /tmp/system.preferences.plist; sudo security -q authorizationdb write system.preferences < /tmp/system.preferences.plist; rm '/tmp/system.preferences.plist'"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -380,7 +378,6 @@ function enable_terminal_secure_entry {
   title="Enable Terminal.app secure keyboard entry"
 
   audit_command="defaults read com.apple.Terminal SecureKeyboardEntry | grep -q '1'"
-  
   fix_command="defaults write com.apple.Terminal SecureKeyboardEntry -bool true"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -457,7 +454,6 @@ function disable_firewall_builin_software {
   title="Disable built-in software from being auto-permitted to listen through firewall"
 
   audit_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getallowsigned | grep 'built-in' | grep -q 'DISABLED'"
-  
   fix_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsigned off >/dev/null"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -474,7 +470,6 @@ function disable_firewall_downloaded_signed {
   title="Disable downloaded signed software from being auto-permitted to listen through firewall"
 
   audit_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getallowsigned | grep 'downloaded' | grep -q 'DISABLED'"
-  
   fix_command="sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsignedapp off >/dev/null"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -492,7 +487,6 @@ function disable_ipv6 {
 
   # shellcheck disable=SC2016
   audit_command='while IFS= read -r i; do if networksetup -getinfo "${i}" | grep -q "IPv6: Off"; then :; else exit 1; fi; done <<< $(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))'
-  
   # shellcheck disable=SC2016
   fix_command='while read -r i; do networksetup -setv6off "${i}"; done <<< "$(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))"'
 
@@ -516,7 +510,6 @@ function disable_mail_remote_content {
   fi
 
   audit_command="defaults read com.apple.mail-shared DisableURLLoading 2>/dev/null | grep -q '1'"
-  
   fix_command="defaults write com.apple.mail-shared DisableURLLoading -bool true"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -533,7 +526,6 @@ function disable_remote_apple_events {
   title="Disable Remote Apple Events"
 
   audit_command="sudo systemsetup -getremoteappleevents | grep -q 'Remote Apple Events: Off'"
-  
   fix_command="sudo systemsetup -setremoteappleevents off >/dev/null"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -550,7 +542,6 @@ function disable_remote_login {
   title="Disable Remote Login"
 
   audit_command="sudo systemsetup -getremotelogin | grep -q 'Remote Login: Off'"
-  
   fix_command="sudo systemsetup -f -setremotelogin off >/dev/null"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
@@ -584,7 +575,6 @@ function set_airdrop_contacts_only {
   title="Set AirDrop Discoverability to 'Contacts Only'"
 
   audit_command="if defaults read com.apple.sharingd DiscoverableMode 2>/dev/null | grep -q 'Contacts Only'; then exit 0; elif defaults read com.apple.sharingd DiscoverableMode 2>/dev/null | grep -q 'Off'; then exit 0; else exit 1; fi"
-
   fix_command="defaults write com.apple.sharingd DiscoverableMode -string 'Contacts Only' \
               && sudo killall -HUP sharingd"
 
@@ -602,7 +592,6 @@ function set_appstore_update_check_daily {
   title="Set AppStore update check to every one (1) day"
 
   audit_command="defaults read com.apple.SoftwareUpdate ScheduleFrequency 2>/dev/null | grep -q '1'"
-
   fix_command="defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
