@@ -18,17 +18,30 @@ There is **no specific focus** on enhancing privacy.
 
 Finally, mOSL will not protect you from the [FSB](https://en.wikipedia.org/wiki/Federal_Security_Service), [MSS](https://en.wikipedia.org/wiki/Ministry_of_State_Security_(China)), [DGSE](https://en.wikipedia.org/wiki/Directorate-General_for_External_Security), or [FSM](https://en.wikipedia.org/wiki/Flying_Spaghetti_Monster).
 
-## Mojave Permissions
+## `Full Disk Access` Permission
 
-In order to audit/ fix `disable mail remote content` `Terminal.app` needs to read from and write to `com.apple.mail-shared.plist`. Mojave requires that `Terminal.app` be given the `Full Disk Access` permission to access this file as files related to `Mail.app` are now a protected. 
+In macOS Mojave certain application data is protected by the OS. For example, if `Example.app` wishes to access `Contacts.app` data `Example.app` must be given expplicit permission via `System Prefernces > Security & Privacy > Privacy`. However some application data cannot be acccesd via a specific permission. Access to this data requires the `Full Disk Access` permission. 
+
+mOSL requires that `Terminal.app` be given the `Full Disk Access` permission. It needs this permission to audit/fix the following settings: 
+
+- `disable mail remote content`
+- `disable_auto_open_safe_downloads`
+
+These are *currently* the **only** settings which require `Full Disk Access`.
 
 It is not possible to programatically get or prompt for this permission, it must be manually given by the user.
 
 To give `Terminal.app` `Full Disk Access`:
 
-`System Preferences` > `Security & Privacy` > `Privacy` > `Full Disk Access` > Add `Terminal.app`
+```
+System Preferences > Security & Privacy > Privacy > Full Disk Access > Add Terminal.app
+```
 
-This is *currently* the **only** setting which requires the `Full Disk Access` permission.   
+More info on macOS's new permission model:
+
+- [`Working with Mojave’s Privacy Protection`](https://eclecticlight.co/2018/09/06/working-with-mojaves-privacy-protection/) by [Howard Oakley](https://twitter.com/howardnoakley)
+- [`TCC Round Up`](https://carlashley.com/2018/09/28/tcc-round-up/) by [Carl Ashley](https://twitter.com/carlashleyphoto)
+- WWDC 2018 Session 702 [`Your Apps and the Future of macOS Security`](https://developer.apple.com/videos/play/wwdc2018/702/)
 
 ## Verification
 
