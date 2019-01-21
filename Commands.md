@@ -3,16 +3,42 @@
 Easy to read, non one-liner, version of all the `audit` and `fix` commands used by mOSL.   
 
 
-## Enable Automatic Updates
+## Enable Automatic System Updates
 
 ### Audit
 ```
-sudo softwareupdate --schedule | grep -q 'Automatic check is on'
+if ! defaults read "/Library/Preferences/com.apple.SoftwareUpdate.plist" "AutomaticallyInstallMacOSUpdates" >/dev/null 2>&1; then
+	exit 1
+	# This key isnt present if the user has not manually interacted with System Preferences > Software Update before
+fi
+defaults read "/Library/Preferences/com.apple.SoftwareUpdate.plist" "AutomaticallyInstallMacOSUpdates" | grep -q "1"
+
 ```
 
 ### Fix 
 ```
-sudo softwareupdate --schedule on
+declare -a keys
+
+keys=(AutomaticCheckEnabled AutomaticDownload AutomaticallyInstallMacOSUpdates ConfigDataInstall CriticalUpdateInstall)
+
+for key in "${keys[@]}"; do
+	defaults write "/Library/Preferences/com.apple.SoftwareUpdate.plist" "${key}" -bool true
+done
+```
+
+## Enable Automatic App Store Updates
+
+### Audit
+```
+if ! defaults read "/Library/Preferences/com.apple.commerce.plist" "AutoUpdate" >/dev/null 2>&1; then
+	exit 1
+fi
+defaults read "/Library/Preferences/com.apple.commerce.plist" "AutoUpdate" >/dev/null 2>&1 | grep -q '0';
+```
+
+### Fix
+```
+defaults write "/Library/Preferences/com.apple.commerce.plist" "AutoUpdate" -bool true
 ```
 
 ## Enable Gatekeeper
