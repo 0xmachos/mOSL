@@ -504,8 +504,8 @@ function disable_mail_remote_content {
   title="Disable automatic loading of remote content by Mail.app"
 
   if ! full_disk_access_check "${title}"; then 
-    echo "  [❌] ${title} ${RED}requires 'Full Disk Access' permission ${RESET}"
-    echo "  [🍺] See the 'Mojave Permissions' section of 'README.md' for instructions" 
+    echo "  [⚠️ ] ${title} (${RED}Requires 'Full Disk Access' permission${RESET})"
+    echo "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions"
     return 1
   fi
 
