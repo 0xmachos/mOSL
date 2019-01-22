@@ -505,7 +505,6 @@ function disable_mail_remote_content {
 
   if ! full_disk_access_check; then 
     echo "  [⚠️ ] ${title} (${RED}Requires 'Full Disk Access' permission${RESET})"
-    echo "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions"
     full_disk_fails=$((full_disk_fails+1))
     return 1
   fi
@@ -560,7 +559,6 @@ function disable_auto_open_safe_downloads {
 
   if ! full_disk_access_check; then 
     echo "  [⚠️ ] ${title} (${RED}Requires 'Full Disk Access' permission${RESET})"
-    echo "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions" 
     full_disk_fails=$((full_disk_fails+1)) 
     return 1
   fi
