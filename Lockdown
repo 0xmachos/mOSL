@@ -741,9 +741,8 @@ function main {
         echo "  [${RED}${setting_index}${RESET}] ${setting_read}"
 
       done
-      echo ""
-      shift # past argument
-      shift # past value
+      
+      echo
       exit 0
       ;;
 
@@ -782,8 +781,6 @@ function main {
           echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
         fi
       fi
-      shift # past argument
-      shift # past value
       ;;
 
     fix|fix-force)
@@ -842,24 +839,19 @@ function main {
         fi
       fi
 
-      shift # past argument
-      shift # past value
       ;;
 
     debug)
       debug
-      shift
       ;;
 
     usage|help|-h|--help|🤷‍♂️|🤷‍♀️)
       usage
-      shift
       ;;
     
     *)
       echo -e "\\n  [❌] ${RED}Invalid command:${RESET} ${cmd}"
-      exit 1  
-      shift
+      exit 1
       ;;
 
   esac
