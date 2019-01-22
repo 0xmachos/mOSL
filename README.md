@@ -79,24 +79,25 @@ See [`Commands.md`](https://github.com/0xmachos/mOSL/blob/master/Commands.md) fo
 
 Settings that can be audited/ fixed:
 ```
-  [0] enable automatic updates
-  [1] enable gatekeeper
-  [2] enable firewall
-  [3] enable admin password preferences
-  [4] enable terminal secure entry
-  [5] enable sip
-  [6] enable filevault
-  [7] disable firewall builin software
-  [8] disable firewall downloaded signed
-  [9] disable ipv6
-  [10] disable mail remote content
-  [11] disable remote apple events
-  [12] disable remote login
-  [13] disable auto open safe downloads
-  [14] set airdrop contacts only
-  [15] set appstore update check daily
-  [16] set firmware password
-  [17] check kext loading consent
-  [18] check efi integrity
-  [19] check if standard user
+  [0] enable automatic system updates
+  [1] enable automatic app store updates
+  [2] enable gatekeeper
+  [3] enable firewall
+  [4] enable admin password preferences
+  [5] enable terminal secure entry
+  [6] enable sip
+  [7] enable filevault
+  [8] disable firewall builin software
+  [9] disable firewall downloaded signed
+  [10] disable ipv6
+  [11] disable mail remote content
+  [12] disable remote apple events
+  [13] disable remote login
+  [14] disable auto open safe downloads
+  [15] set airdrop contacts only
+  [16] set appstore update check daily
+  [17] set firmware password
+  [18] check kext loading consent
+  [19] check efi integrity
+  [20] check if standard user
 ```
