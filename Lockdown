@@ -635,7 +635,7 @@ function check_efi_integrity {
 
 
   if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
-    echo "  [⚠️ ] Check EFI Firmware Integrity ${RED}is not${RESET} supported by this Mac"
+    echo "  [⚠️ ] ${title} (${RED}Not supported by this Mac${RESET})"
     audit_fails=$((audit_fails-1))
     # Decrement the counter so that when this function fails on sysytem with T2 chips it doesn't
     # count as a failure in the contect of printing the statistics 
