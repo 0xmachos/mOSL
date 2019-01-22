@@ -506,6 +506,7 @@ function disable_mail_remote_content {
   if ! full_disk_access_check "${title}"; then 
     echo "  [⚠️ ] ${title} (${RED}Requires 'Full Disk Access' permission${RESET})"
     echo "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions"
+    full_disk_fails=$((full_disk_fails+1))
     return 1
   fi
 
@@ -560,6 +561,7 @@ function disable_auto_open_safe_downloads {
   if ! full_disk_access_check "${title}"; then 
     echo "  [⚠️ ] ${title} (${RED}Requires 'Full Disk Access' permission${RESET})"
     echo "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions" 
+    full_disk_fails=$((full_disk_fails+1)) 
     return 1
   fi
   
@@ -715,6 +717,7 @@ function main {
   declare -i setting_index=-1
   declare audit_setting_num
   declare fix_setting_num
+  declare -i full_disk_fails=0
 
   settings=(enable_automatic_system_updates enable_automatic_app_store_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry enable_sip enable_filevault \
@@ -775,6 +778,11 @@ function main {
         exit 0
       else
         echo -e "\\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\\n"
+        
+        if [ "${full_disk_fails}" -gt 0 ]; then
+          echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need Full Disk Access permission to audit"
+          echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
+        fi
       fi
       shift # past argument
       shift # past value
@@ -828,6 +836,11 @@ function main {
         
         if [ "${no_fix_commands}" -gt 0 ]; then
           echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} can't be programmatically fixed 😢\\n"
+        fi
+
+        if [ "${full_disk_fails}" -gt 0 ]; then
+          echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need the Full Disk Access permission to fix"
+          echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
         fi
       fi
 
