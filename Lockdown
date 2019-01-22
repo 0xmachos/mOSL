@@ -283,6 +283,62 @@ function full_disk_access_check {
 }
 
 
+function statistics {
+
+  declare -i offset=0
+
+  if [[ "${t2_mac}" == "True" ]]; then
+    offset=$((offset+1))
+  fi
+
+  if ! full_disk_access_check; then
+    offset=$((offset+2))
+  fi
+  # $offset and the above if checks are a hacky fix to make the statistics correct
+  # Because fix mode calls audit commands first, any counter placed inside 
+  # Settings functions will be called twice in fix mode
+
+  if [[ "${cmd}" == "audit" ]]; then 
+
+    if [ $((audit_fails-offset)) -le 0 ]; then
+      # I think this is correct rather than just checking "${audit_fails}"
+      echo -e "\\n  [🎉] All settings passed!"
+      exit 0
+    else
+      echo -e "\\n  [❌] ${BOLD}$((audit_fails-offset))${RESET}/${#settings[@]} settings ${RED}failed${RESET} 😢\\n"
+      if [ "${full_disk_fails}" -gt 0 ]; then
+        echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need Full Disk Access permission to audit"
+        echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
+      fi
+    fi
+  
+  elif [[ "${cmd}" == "fix" ]]; then
+    
+    if [ $((audit_fails-offset)) -le 0 ]; then
+      echo -e "\\n  [🎉] Nothing to fix!\\n"
+      exit 0
+    else
+      echo -e "\\n  [⚠️ ] ${BOLD}$((audit_fails-offset))${RESET}/${#settings[@]} needed fixed"
+      
+      if [ "${successful_fixes}" -gt 0 ]; then
+        echo -e "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} fixed!\\n"
+      else
+        echo -e "  [❌] ${BOLD}No${RESET} settings successfully fixed!\\n"
+      fi
+      
+      if [ "${no_fix_commands}" -gt 0 ]; then
+        echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} can't be programmatically fixed 😢\\n"
+      fi
+
+      if [ "${full_disk_fails}" -gt 0 ]; then
+        echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need the Full Disk Access permission to fix"
+        echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
+      fi
+    fi
+  fi
+}
+
+
 ### END UTILITY FUNCTIONS ###
 
 
@@ -505,7 +561,6 @@ function disable_mail_remote_content {
 
   if ! full_disk_access_check; then 
     echo "  [⚠️ ] ${title} (${RED}Requires 'Full Disk Access' permission${RESET})"
-    full_disk_fails=$((full_disk_fails+1))
     return 1
   fi
 
@@ -554,12 +609,11 @@ function disable_auto_open_safe_downloads {
   local title
   local audit_command
   local fix_command
-  
+
   title="Disable Safari Auto Open 'safe' Files"
 
   if ! full_disk_access_check; then 
     echo "  [⚠️ ] ${title} (${RED}Requires 'Full Disk Access' permission${RESET})"
-    full_disk_fails=$((full_disk_fails+1)) 
     return 1
   fi
   
@@ -634,9 +688,7 @@ function check_efi_integrity {
 
   if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
     echo "  [⚠️ ] ${title} (${RED}Not supported by this Mac${RESET})"
-    audit_fails=$((audit_fails-1))
-    # Decrement the counter so that when this function fails on sysytem with T2 chips it doesn't
-    # count as a failure in the contect of printing the statistics 
+    t2_mac="True"
     return 1 
   fi
   
@@ -715,7 +767,10 @@ function main {
   declare -i setting_index=-1
   declare audit_setting_num
   declare fix_setting_num
-  declare -i full_disk_fails=0
+  declare -ir full_disk_fails=2
+  # Decalre this as 2 as their are only two settings which require Full Disk Access
+  # If the permission isnt granted they will both fail
+  declare t2_mac="False"
 
   settings=(enable_automatic_system_updates enable_automatic_app_store_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry enable_sip enable_filevault \
@@ -770,17 +825,8 @@ function main {
         done
       fi
 
-      if [ "${audit_fails}" -le 0 ]; then
-        echo -e "\\n  [🎉] All settings passed!"
-        exit 0
-      else
-        echo -e "\\n  [❌] ${BOLD}${audit_fails}${RESET}/${#settings[@]} settings ${RED}failed${RESET}\\n"
-        
-        if [ "${full_disk_fails}" -gt 0 ]; then
-          echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need Full Disk Access permission to audit"
-          echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
-        fi
-      fi
+      statistics
+      
       ;;
 
     fix|fix-force)
@@ -822,23 +868,8 @@ function main {
         done
       fi
 
-      if [ "${audit_fails}" -le 0 ]; then
-        echo -e "\\n  [🎉] Nothing to fix!\\n"
-        exit 0
-      else
-        echo -e "\\n  [⚠️ ] ${BOLD}${audit_fails}${RESET}/${#settings[@]} needed fixed"
-        echo "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} fixed!"
-        
-        if [ "${no_fix_commands}" -gt 0 ]; then
-          echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} can't be programmatically fixed 😢\\n"
-        fi
-
-        if [ "${full_disk_fails}" -gt 0 ]; then
-          echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need the Full Disk Access permission to fix"
-          echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
-        fi
-      fi
-
+      statistics
+      
       ;;
 
     debug)
