@@ -37,6 +37,8 @@ To give `Terminal.app` `Full Disk Access`:
 System Preferences > Security & Privacy > Privacy > Full Disk Access > Add Terminal.app
 ```
 
+Once you are done with mOSL you can revoke `Full Disk Access` for `Terminal.app`. There's a small checkbox next to `Terminal` which you can uncheck to revoke the premssion without entirely removing `Terminal.app` from the list.  
+
 More info on macOS's new permission model:
 
 - [`Working with Mojave’s Privacy Protection`](https://eclecticlight.co/2018/09/06/working-with-mojaves-privacy-protection/) by [Howard Oakley](https://twitter.com/howardnoakley)
