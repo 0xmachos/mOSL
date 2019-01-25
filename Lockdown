@@ -53,6 +53,7 @@ function usage {
 # ctrl_c
 # debug
 # full_disk_access_check
+# statistics
 
 
 function macos_compatability_check {
@@ -292,7 +293,7 @@ function statistics {
   fi
 
   if ! full_disk_access_check; then
-    offset=$((offset+2))
+    offset=$((offset+full_disk_fails))
   fi
   # $offset and the above if checks are a hacky fix to make the statistics correct
   # Because fix mode calls audit commands first, any counter placed inside 
@@ -306,7 +307,8 @@ function statistics {
       exit 0
     else
       echo -e "\\n  [❌] ${BOLD}$((audit_fails-offset))${RESET}/${#settings[@]} settings ${RED}failed${RESET} 😢\\n"
-      if [ "${full_disk_fails}" -gt 0 ]; then
+      
+      if ! full_disk_access_check; then
         echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need Full Disk Access permission to audit"
         echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
       fi
@@ -330,7 +332,7 @@ function statistics {
         echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} can't be programmatically fixed 😢\\n"
       fi
 
-      if [ "${full_disk_fails}" -gt 0 ]; then
+      if ! full_disk_access_check; then
         echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need the Full Disk Access permission to fix"
         echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
       fi
