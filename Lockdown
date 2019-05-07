@@ -197,14 +197,29 @@ function verify_signature {
   # Verify Lockdown signature with minisign
 
   local path
+  local lockdown_version_path
+  lockdown_version_path=$(echo "${LOCKDOWN_VERSION}" | tr -d 'v')
 
   follow_symlink
 
   if [ -x "$(command -v minisign)" ]; then
 
-    if ! minisign -Vm "${path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
-      echo "[❌] Failed to validate Lockdown signature with minisign"
-      exit 1
+    if [[ "${path}" =~ "Cellar/mosl" ]]; then
+      # If installed by Brew 
+
+      if ! minisign -x "/usr/local/Cellar/mosl/${lockdown_version_path}/Lockdown.minisig"\
+           -Vm "${path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
+        
+        echo "[❌] Failed to validate Lockdown signature with minisign"
+        exit 1
+      fi
+    
+    else
+      
+      if ! minisign -Vm "${path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
+        echo "[❌] Failed to validate Lockdown signature with minisign"
+        exit 1
+      fi
     fi
 
   else
