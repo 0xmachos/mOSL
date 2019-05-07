@@ -3,6 +3,7 @@
 
 # Lockdown
 #   Lockdown macOS Mojave security settings
+declare -r LOCKDOWN_VERSION="v2.3.0"
 
 set -uo pipefail
 # -u prevent using undefined variables
@@ -761,7 +762,6 @@ function main {
   # Check the system is running the supoorted version of macOS 
 
   declare -r cmd=${1:-"usage"}
-  declare -r LOCKDOWN_VERSION="v2.3.0"
   declare -a settings
   declare -i audit_fails=0
   declare -i no_fix_commands=0
