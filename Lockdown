@@ -3,7 +3,7 @@
 
 # Lockdown
 #   Lockdown macOS Mojave security settings
-declare -r LOCKDOWN_VERSION="v2.3.0"
+declare -r LOCKDOWN_VERSION="v2.4.0"
 
 set -uo pipefail
 # -u prevent using undefined variables
