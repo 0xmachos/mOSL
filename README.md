@@ -8,6 +8,23 @@ Bash script to audit and fix macOS Mojave (`10.14.x`) security settings
 - This script will **only ever** support the _latest_ macOS release  
 - This script requires your **password** to invoke some commands with `sudo`  
 
+
+## `brew`
+
+To install mOSL via `brew` execute
+
+```
+brew tap 0xmachos/homebrew-mosl
+brew install mosl
+```
+
+mOSL will then be available as: 
+
+```
+Lockdown
+```
+
+
 ## Threat Model(ish) 
 
 The main goal is to enforce already secure defaults and apply more strict non-default options. 
