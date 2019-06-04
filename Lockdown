@@ -2,8 +2,8 @@
 # mOSL/Lockdown
 
 # Lockdown
-#   Lockdown macOS Mojave security settings
-declare -r LOCKDOWN_VERSION="v2.4.0"
+#   Lockdown macOS Catalina security settings
+declare -r LOCKDOWN_VERSION="v3.0.0"
 
 set -uo pipefail
 # -u prevent using undefined variables
