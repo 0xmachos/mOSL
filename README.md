@@ -37,7 +37,7 @@ Finally, mOSL will not protect you from the [FSB](https://en.wikipedia.org/wiki/
 
 ## `Full Disk Access` Permission
 
-In macOS Mojave certain application data is protected by the OS. For example, if `Example.app` wishes to access `Contacts.app` data `Example.app` must be given explicit permission via `System Preferences > Security & Privacy > Privacy`. However some application data cannot be accessed via a specific permission. Access to this data requires the `Full Disk Access` permission. 
+In macOS Mojave and later certain application data is protected by the OS. For example, if `Example.app` wishes to access `Contacts.app` data `Example.app` must be given explicit permission via `System Preferences > Security & Privacy > Privacy`. However some application data cannot be accessed via a specific permission. Access to this data requires the `Full Disk Access` permission. 
 
 mOSL requires that `Terminal.app` be given the `Full Disk Access` permission. It needs this permission to audit/fix the following settings: 
 
