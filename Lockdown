@@ -62,7 +62,7 @@ function macos_compatability_check {
   # Check if running on a Mac
   # Check if the Mac is running the supoorted version of macOS 
 
-  local -r supported_macos_version="10.14"
+  local -r supported_macos_version="10.15"
   local os
   local current_macos_version
 
