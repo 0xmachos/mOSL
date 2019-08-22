@@ -224,7 +224,7 @@ fi
 ### Fix 
 ```
 defaults write com.apple.sharingd DiscoverableMode -string 'Contacts Only'
-sudo killall -HUP sharingd"
+sudo killall -HUP sharingd
 ```
 
 ## Set AppStore update check to every one (`1`) day
