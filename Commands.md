@@ -239,6 +239,18 @@ defaults read com.apple.SoftwareUpdate ScheduleFrequency | grep -q '1'
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
 ```
 
+## Set a firmware password
+
+### Audit
+```
+sudo firmwarepasswd -check | grep -q 'Yes'
+```
+
+### Fix 
+```
+sudo firmwarepasswd -setpasswd
+```
+
 ## Check Kernel Extension User Consent required
 
 ### Audit
@@ -261,18 +273,6 @@ n/a
 ### Fix 
 ```
 n/a
-```
-
-## Set a firmware password
-
-### Audit
-```
-sudo firmwarepasswd -check | grep -q 'Yes'
-```
-
-### Fix 
-```
-sudo firmwarepasswd -setpasswd
 ```
 
 ## `${USER}` is not an administrator
