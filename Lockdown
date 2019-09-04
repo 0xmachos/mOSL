@@ -840,10 +840,10 @@ function main {
           audit_fails=$((audit_fails+1))
           fi
         done
+
+        statistics
       fi
 
-      statistics
-      
       ;;
 
     fix|fix-force)
@@ -883,9 +883,9 @@ function main {
             fi
           fi
         done
-      fi
 
-      statistics
+        statistics
+      fi
       
       ;;
 
