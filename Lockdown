@@ -187,7 +187,7 @@ function follow_symlink {
   done
   parent=$(dirname "${source}")
   # get directory of $source
-  path="$(cd -P "${parent}" && pwd)/${base}"
+  lockdown_path="$(cd -P "${parent}" && pwd)/${base}"
   # Build path to Lockdown
 }
 
@@ -203,11 +203,11 @@ function verify_signature {
 
   if [ -x "$(command -v minisign)" ]; then
 
-    if [[ "${path}" =~ "Cellar/mosl" ]]; then
+    if [[ "${lockdown_path}" =~ "Cellar/mosl" ]]; then
       # If installed by Brew 
 
       if ! minisign -x "/usr/local/Cellar/mosl/${lockdown_version_path}/Lockdown.minisig"\
-           -Vm "${path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
+           -Vm "${lockdown_path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
         
         echo "[❌] Failed to validate Lockdown signature with minisign"
         exit 1
@@ -215,7 +215,7 @@ function verify_signature {
     
     else
       
-      if ! minisign -Vm "${path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
+      if ! minisign -Vm "${lockdown_path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
         echo "[❌] Failed to validate Lockdown signature with minisign"
         exit 1
       fi
