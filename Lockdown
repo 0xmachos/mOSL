@@ -635,7 +635,7 @@ function disable_auto_open_safe_downloads {
     return 1
   fi
   
-  audit_command="defaults read com.apple.Safari AutoOpenSafeDownloads | grep -q '0'"
+  audit_command="defaults read com.apple.Safari AutoOpenSafeDownloads 2>/dev/null | grep -q '0'"
   fix_command="defaults write com.apple.Safari AutoOpenSafeDownloads -bool false"
 
   mode_check "${mode}" "${title}" "${audit_command}" "${fix_command}"
