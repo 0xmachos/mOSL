@@ -196,7 +196,6 @@ function verify_signature {
   
   # Verify Lockdown signature with minisign
 
-  local path
   local lockdown_version_path
   lockdown_version_path=$(echo "${LOCKDOWN_VERSION}" | tr -d 'v')
 
