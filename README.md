@@ -6,6 +6,9 @@ Bash script to audit and fix macOS Mojave (`10.14.x`) security settings
 Inspired by and based on [Lockdown](https://objective-see.com/products/lockdown.html) by [Patrick Wardle](https://twitter.com/patrickwardle) and [osxlockdown](https://github.com/SummitRoute/osxlockdown) by [Scott Piper](https://twitter.com/0xdabbad00https://twitter.com/0xdabbad00). 
 
 ## Warnings
+
+**mOSL is being rewritten in Swift and the Bash version will be deprecated.**. See: "[The Future of mOSL](https://0xmachos.github.io/2019-09-21-The-Future-of-mOSL/)".
+
 - **Always** run the [latest release](https://github.com/0xmachos/mOSL/releases/latest) **not** the code in `master`!
 - This script will **only ever** support the _latest_ macOS release  
 - This script requires your **password** to invoke some commands with `sudo`  
@@ -25,7 +28,6 @@ mOSL will then be available as:
 ```
 Lockdown
 ```
-
 
 ## Threat Model(ish) 
 
