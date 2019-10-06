@@ -1,7 +1,7 @@
 # macOS Lockdown (mOSL)
 [![Build Status](https://travis-ci.org/0xmachos/mOSL.svg?branch=master)](https://travis-ci.org/0xmachos/mOSL) [![GitHub Release](https://github-basic-badges.herokuapp.com/release/0xmachos/mOSL.svg)](https://github.com/0xmachos/mOSL/releases/latest)
 
-Bash script to audit and fix macOS Mojave (`10.14.x`) security settings
+Bash script to audit and fix macOS Catalina (`10.15.x`) security settings
 
 Inspired by and based on [Lockdown](https://objective-see.com/products/lockdown.html) by [Patrick Wardle](https://twitter.com/patrickwardle) and [osxlockdown](https://github.com/SummitRoute/osxlockdown) by [Scott Piper](https://twitter.com/0xdabbad00https://twitter.com/0xdabbad00). 
 
@@ -41,7 +41,7 @@ Finally, mOSL will not protect you from the [FSB](https://en.wikipedia.org/wiki/
 
 ## `Full Disk Access` Permission
 
-In macOS Mojave certain application data is protected by the OS. For example, if `Example.app` wishes to access `Contacts.app` data `Example.app` must be given explicit permission via `System Preferences > Security & Privacy > Privacy`. However some application data cannot be accessed via a specific permission. Access to this data requires the `Full Disk Access` permission. 
+In macOS Mojave and later certain application data is protected by the OS. For example, if `Example.app` wishes to access `Contacts.app` data `Example.app` must be given explicit permission via `System Preferences > Security & Privacy > Privacy`. However some application data cannot be accessed via a specific permission. Access to this data requires the `Full Disk Access` permission. 
 
 mOSL requires that `Terminal.app` be given the `Full Disk Access` permission. It needs this permission to audit/fix the following settings: 
 

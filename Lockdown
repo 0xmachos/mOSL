@@ -2,8 +2,8 @@
 # mOSL/Lockdown
 
 # Lockdown
-#   Lockdown macOS Mojave security settings
-declare -r LOCKDOWN_VERSION="v2.4.0"
+#   Lockdown macOS Catalina security settings
+declare -r LOCKDOWN_VERSION="v3.0.0"
 
 set -uo pipefail
 # -u prevent using undefined variables
@@ -62,7 +62,7 @@ function macos_compatability_check {
   # Check if running on a Mac
   # Check if the Mac is running the supoorted version of macOS 
 
-  local -r supported_macos_version="10.14"
+  local -r supported_macos_version="10.15"
   local os
   local current_macos_version
 
@@ -187,7 +187,7 @@ function follow_symlink {
   done
   parent=$(dirname "${source}")
   # get directory of $source
-  path="$(cd -P "${parent}" && pwd)/${base}"
+  lockdown_path="$(cd -P "${parent}" && pwd)/${base}"
   # Build path to Lockdown
 }
 
@@ -196,7 +196,6 @@ function verify_signature {
   
   # Verify Lockdown signature with minisign
 
-  local path
   local lockdown_version_path
   lockdown_version_path=$(echo "${LOCKDOWN_VERSION}" | tr -d 'v')
 
@@ -204,11 +203,11 @@ function verify_signature {
 
   if [ -x "$(command -v minisign)" ]; then
 
-    if [[ "${path}" =~ "Cellar/mosl" ]]; then
+    if [[ "${lockdown_path}" =~ "Cellar/mosl" ]]; then
       # If installed by Brew 
 
       if ! minisign -x "/usr/local/Cellar/mosl/${lockdown_version_path}/Lockdown.minisig"\
-           -Vm "${path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
+           -Vm "${lockdown_path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
         
         echo "[❌] Failed to validate Lockdown signature with minisign"
         exit 1
@@ -216,7 +215,7 @@ function verify_signature {
     
     else
       
-      if ! minisign -Vm "${path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
+      if ! minisign -Vm "${lockdown_path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
         echo "[❌] Failed to validate Lockdown signature with minisign"
         exit 1
       fi
@@ -705,7 +704,7 @@ function check_efi_integrity {
 
 
   if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
-    echo "  [⚠️ ] ${title} (${RED}Not supported by this Mac${RESET})"
+    echo "  [⚠️ ] ${title} (${RED}Not supported on Macs with T2 chips${RESET})"
     t2_mac="True"
     return 1 
   fi
