@@ -704,7 +704,7 @@ function check_efi_integrity {
 
 
   if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
-    echo "  [⚠️ ] ${title} (${RED}Not supported by this Mac${RESET})"
+    echo "  [⚠️ ] ${title} (${RED}Not supported on Macs with T2 chips${RESET})"
     t2_mac="True"
     return 1 
   fi
