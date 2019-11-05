@@ -29,7 +29,6 @@ done
 ```
 
 ## Enable Automatic App Store Updates
-
 ### Audit
 ```
 if ! defaults read "/Library/Preferences/com.apple.commerce.plist" "AutoUpdate" >/dev/null 2>&1; then
