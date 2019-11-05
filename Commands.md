@@ -147,7 +147,7 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsignedapp off
 
 ### Audit
 
-Lists all network devices via `networksetup -listallnetworkservices` (`$i`) then calls `networksetup -getinfo` on each device (`$i`) which lists each network its DHCP confg.
+Lists all network devices via `networksetup -listallnetworkservices` (`$i`) then calls `networksetup -getinfo` on each device (`$i`) which lists the DHCP configuration of each device.
 
 ```
 while IFS= read -r i; do
