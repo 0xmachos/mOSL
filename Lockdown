@@ -559,7 +559,7 @@ function disable_ipv6 {
   title="Disable IPv6"
 
   # shellcheck disable=SC2016
-  audit_command='while IFS= read -r i; do if networksetup -getinfo "${i}" | grep -q "IPv6: Off"; then :; else exit 1; fi; done <<< $(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))'
+  audit_command='while IFS= read -r i; do if ! networksetup -getinfo "${i}" | grep "IPv6: Off"; then echo "enabled"; fi; done <<< $(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))'
   # shellcheck disable=SC2016
   fix_command='while read -r i; do networksetup -setv6off "${i}"; done <<< "$(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))"'
 
