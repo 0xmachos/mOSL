@@ -143,6 +143,9 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsignedapp off
 ## Disable IPv6
 
 ### Audit
+
+Lists all network devices via `networksetup -listallnetworkservices` (`$i`) then calls `networksetup -getinfo` on each device (`$i`) which lists each network its DHCP confg.
+
 ```
 while IFS= read -r i; do
   if ! networksetup -getinfo "${i}" | grep "IPv6: Off"; then
