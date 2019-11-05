@@ -5,6 +5,8 @@ Easy to read, non one-liner, version of all the `audit` and `fix` commands used 
 
 ## Enable Automatic System Updates
 
+Checks if user default `com.apple.SoftwareUpdate.plist` is set to `AutomaticallyInstallMacOSUpdates`.
+
 ### Audit
 ```
 if ! defaults read "/Library/Preferences/com.apple.SoftwareUpdate.plist" "AutomaticallyInstallMacOSUpdates" >/dev/null 2>&1; then
@@ -42,6 +44,8 @@ defaults write "/Library/Preferences/com.apple.commerce.plist" "AutoUpdate" -boo
 ```
 
 ## Enable Gatekeeper
+
+Checks if the output of `spctl --status` contains `assessments enabled`.
 
 ### Audit
 ```
