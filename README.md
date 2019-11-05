@@ -16,7 +16,7 @@ Inspired by and based on [Lockdown](https://objective-see.com/products/lockdown.
 
 ## `brew`
 
-tap: [`homebrew-mosl`](https://github.com/0xmachos/homebrew-mosl)
+tap: [`0xmachos/homebrew-mosl`](https://github.com/0xmachos/homebrew-mosl)
 
 To install mOSL via `brew` execute:
 
