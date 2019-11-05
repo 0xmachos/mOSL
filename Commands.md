@@ -144,12 +144,10 @@ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setallowsignedapp off
 
 ### Audit
 ```
-while IFS= read -r i; do 
-  if networksetup -getinfo "${i}" | grep -q "IPv6: Off"; then 
-    :
-  else 
-    exit 1 
-  fi; 
+while IFS= read -r i; do
+  if ! networksetup -getinfo "${i}" | grep "IPv6: Off"; then
+    exit 1
+  fi
 done <<< $(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))
 ```
 
