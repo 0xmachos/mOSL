@@ -66,14 +66,14 @@ function macos_compatability_check {
   local os
   local current_macos_version
 
-  os="$(uname -s)"
+  os="$(/usr/bin/uname -s)"
 
   if [[ "${os}" != "Darwin" ]]; then 
     echo "[❌] Lockdown was built for macOS"
     exit 1
   fi
 
-  current_macos_version="$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')";
+  current_macos_version="$(/usr/bin/sw_vers -productVersion | /usr/bin/awk -F '.' '{print $1 "." $2}')";
 
   if [ "${current_macos_version}" != "${supported_macos_version}" ]; then 
     echo "[❌] Lockdown was built for macOS ${supported_macos_version}.x"
