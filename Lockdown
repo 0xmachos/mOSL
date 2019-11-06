@@ -168,16 +168,16 @@ function follow_symlink {
   # Follow the symlink(s) to the real location of Lockdown
   # This is required for Minisign to verify the signature
 
-  base=$(basename "${0}")
+  base=$(/usr/bin/basename "${0}")
   # Lockdown
   source="${BASH_SOURCE[0]}"
   # /x/y/z/Lockdown
   while [ -h "${source}" ]; do
     # While $source is a symlink
-    dir="$(cd -P "$(dirname "${source}")" && pwd)"
+    dir="$(cd -P "$(/usr/bin/dirname "${source}")" && pwd)"
     # Get directory of $source
     # cd into dir of $source and run `pwd`
-    source="$(readlink "${source}")"
+    source="$(/usr/bin/readlink "${source}")"
     # get target of $source symlink 
     
     if [[ "${source}" != /* ]]; then 
@@ -185,7 +185,7 @@ function follow_symlink {
     fi
   
   done
-  parent=$(dirname "${source}")
+  parent=$(/usr/bin/dirname "${source}")
   # get directory of $source
   lockdown_path="$(cd -P "${parent}" && pwd)/${base}"
   # Build path to Lockdown
@@ -201,12 +201,12 @@ function verify_signature {
 
   follow_symlink
 
-  if [ -x "$(command -v minisign)" ]; then
+  if [ -x "/usr/local/bin/minisign" ]; then
 
     if [[ "${lockdown_path}" =~ "Cellar/mosl" ]]; then
       # If installed by Brew 
 
-      if ! minisign -x "/usr/local/Cellar/mosl/${lockdown_version_path}/Lockdown.minisig"\
+      if ! /usr/local/bin/minisign -x "/usr/local/Cellar/mosl/${lockdown_version_path}/Lockdown.minisig"\
            -Vm "${lockdown_path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
         
         echo "[❌] Failed to validate Lockdown signature with minisign"
@@ -215,7 +215,7 @@ function verify_signature {
     
     else
       
-      if ! minisign -Vm "${lockdown_path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
+      if ! /usr/local/bin/minisign -Vm "${lockdown_path}" -P "RWTiYbJbLl7q6uQ70l1XCvGExizUgEBNDPH0m/1yMimcsfgh542+RDPU" >/dev/null 2>&1; then 
         echo "[❌] Failed to validate Lockdown signature with minisign"
         exit 1
       fi
@@ -269,7 +269,7 @@ function debug {
   local is_admin="False"
   local has_full_disk_access="False"
 
-  if groups | grep -q 'admin'; then
+  if /usr/bin/groups | /usr/bin/grep -q 'admin'; then
     is_admin="True"
   fi
 
@@ -280,7 +280,7 @@ function debug {
   echo -e "\\n${RED}Debug information:${RESET} \\n"
 
   echo "      mOSL Version:   ${LOCKDOWN_VERSION}"
-  system_profiler SPSoftwareDataType | grep 'Version'
+  /usr/sbin/system_profiler SPSoftwareDataType | /usr/bin/grep 'Version'
   echo "      Is admin:       ${is_admin}"
   echo "      Full Disk Access: ${has_full_disk_access}"
   echo ""
@@ -489,7 +489,7 @@ function enable_filevault {
 
   if [[ "${mode}" == "fix" ]]; then
 
-    if ! diskutil info / | grep 'File System Personality:' | grep -q 'APFS'; then
+    if ! /usr/sbin/diskutil info / | /usr/bin/grep 'File System Personality:' | /usr/bin/grep -q 'APFS'; then
       # Only offer to enable if the filesystem is APFS 
       return 1
     elif [[ "${cmd}" == "fix-force" ]]; then
@@ -559,7 +559,7 @@ function disable_ipv6 {
   title="Disable IPv6"
 
   # shellcheck disable=SC2016
-  audit_command='while IFS= read -r i; do if ! networksetup -getinfo "${i}" | grep -q "IPv6: Off"; then exit1; fi; done <<< $(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))'
+  audit_command='while IFS= read -r i; do if ! networksetup -getinfo "${i}" | grep -q "IPv6: Off"; then exit 1; fi; done <<< $(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))'
   # shellcheck disable=SC2016
   fix_command='while read -r i; do networksetup -setv6off "${i}"; done <<< "$(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))"'
 
@@ -703,7 +703,7 @@ function check_efi_integrity {
   fix_command=''
 
 
-  if system_profiler SPiBridgeDataType | grep 'Model Name:' | grep -q 'T2'; then 
+  if /usr/sbin/system_profiler SPiBridgeDataType | /usr/bin/grep 'Model Name:' | /usr/bin/grep -q 'T2'; then 
     echo "  [⚠️ ] ${title} (${RED}Not supported on Macs with T2 chips${RESET})"
     t2_mac="True"
     return 1 
