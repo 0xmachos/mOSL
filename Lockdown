@@ -52,6 +52,7 @@ function usage {
 # check_index
 # sudo_prompt
 # ctrl_c
+# check_if_vm
 # debug
 # full_disk_access_check
 # statistics
@@ -263,6 +264,14 @@ function ctrl_c {
         exit 1
 }
 
+function check_if_vm {
+
+  if system_profiler SPHardwareDataType | grep -q "VMware";  then
+    return 0
+  else
+    return 1
+  fi
+}
 
 function debug {
 
@@ -277,12 +286,17 @@ function debug {
     has_full_disk_access="True"
   fi
 
+  if check_if_vm; then
+    is_vm="True"
+  fi
+
   echo -e "\\n${RED}Debug information:${RESET} \\n"
 
   echo "      mOSL Version:   ${LOCKDOWN_VERSION}"
   /usr/sbin/system_profiler SPSoftwareDataType | /usr/bin/grep 'Version'
   echo "      Is admin:       ${is_admin}"
   echo "      Full Disk Access: ${has_full_disk_access}"
+  echo "      Virtual Machine: ${is_vm}"
   echo ""
 
   exit 0
@@ -787,6 +801,7 @@ function main {
   # Decalre this as 2 as their are only two settings which require Full Disk Access
   # If the permission isnt granted they will both fail
   declare t2_mac="False"
+  declare is_vm="False"
 
   settings=(enable_automatic_system_updates enable_automatic_app_store_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry enable_sip enable_filevault \
