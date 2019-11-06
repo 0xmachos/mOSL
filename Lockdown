@@ -19,9 +19,9 @@ IFS=$'\n\t'
 tput sgr0; 
 # reset colors
 
-readonly RED="$(tput setaf 1)"
-readonly RESET="$(tput sgr0)"
-readonly BOLD="$(tput bold)"
+readonly RED="$(/usr/bin/tput setaf 1)"
+readonly RESET="$(/usr/bin/tput sgr0)"
+readonly BOLD="$(/usr/bin/tput bold)"
 
 ### END Colours ###
 
