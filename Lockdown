@@ -304,6 +304,9 @@ function debug {
   fi
 
   if verify_signature; then
+    # TODO: Calling verify_signature again here results 
+    # in a second "minisign is not installed" warning 
+    # being printed when `./Lockdown debug` is executed 
     is_codesigned="True"
   fi
 
