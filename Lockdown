@@ -270,6 +270,7 @@ function ctrl_c {
 function check_if_vm {
 
   if system_profiler SPHardwareDataType | grep -q "VMware";  then
+    # TODO: Only detects VMware. Add VirtualBox, Parallels, generic? 
     return 0
   else
     return 1
