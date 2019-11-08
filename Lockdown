@@ -53,6 +53,7 @@ function usage {
 # sudo_prompt
 # ctrl_c
 # check_if_vm
+# check_sip
 # debug
 # full_disk_access_check
 # statistics
