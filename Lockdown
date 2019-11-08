@@ -363,6 +363,10 @@ function statistics {
         echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need Full Disk Access permission to audit"
         echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
       fi
+
+      if ! check_if_vm; then
+        echo "  [⚠️ ] ${BOLD}1${RESET} setting can't be audited in a virtual machine"
+      fi
     fi
   
   elif [[ "${cmd}" == "fix" ]]; then
@@ -386,6 +390,10 @@ function statistics {
       if ! full_disk_access_check; then
         echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need the Full Disk Access permission to fix"
         echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
+      fi
+
+      if ! check_if_vm; then
+        echo "  [⚠️ ] ${BOLD}1${RESET} setting can't be fixed in a virtual machine"
       fi
     fi
   fi
@@ -760,6 +768,11 @@ function set_firmware_password {
   title="Set a firmware password"
   audit_command="sudo firmwarepasswd -check | grep -q 'Yes'"
   fix_command="sudo firmwarepasswd -setpasswd"
+
+  if check_if_vm; then
+    echo "  [⚠️ ] ${title} (${RED}Can't set a firmware password in a VM${RESET})"
+    return 1
+  fi
 
   if [[ "${mode}" == "fix" ]]; then
 
