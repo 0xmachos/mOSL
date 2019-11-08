@@ -262,6 +262,7 @@ function sudo_prompt {
 
 
 function ctrl_c {
+  
         echo -e "\\n[❌] ${USER} has chosen to quit!"
         exit 1
 }
