@@ -225,6 +225,8 @@ function verify_signature {
   else
     echo "[⚠️ ] ${BOLD}Unable to verify Lockdown signature${RESET} as minisign is not installed"
     echo -e "[🍺] brew install minisign\\n"
+    is_codesigned="no minisgn"
+    return 1
   fi
 }
 
@@ -290,6 +292,10 @@ function debug {
     is_vm="True"
   fi
 
+  if verify_signature; then
+    is_codesigned="True"
+  fi
+
   echo -e "\\n${RED}Debug information:${RESET} \\n"
 
   echo "      mOSL Version:   ${LOCKDOWN_VERSION}"
@@ -297,6 +303,7 @@ function debug {
   echo "      Is admin:       ${is_admin}"
   echo "      Full Disk Access: ${has_full_disk_access}"
   echo "      Virtual Machine: ${is_vm}"
+  echo "      Codesigned:      ${is_codesigned}"
   echo ""
 
   exit 0
@@ -802,6 +809,7 @@ function main {
   # If the permission isnt granted they will both fail
   declare t2_mac="False"
   declare is_vm="False"
+  declare is_codesigned="False"
 
   settings=(enable_automatic_system_updates enable_automatic_app_store_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry enable_sip enable_filevault \
