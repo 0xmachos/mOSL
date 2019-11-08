@@ -275,6 +275,15 @@ function check_if_vm {
   fi
 }
 
+function check_sip {
+
+  if csrutil status | grep -q "enabled"; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 function debug {
 
   local is_admin="False"
@@ -296,6 +305,10 @@ function debug {
     is_codesigned="True"
   fi
 
+  if check_sip; then
+    sip="True"
+  fi
+
   echo -e "\\n${RED}Debug information:${RESET} \\n"
 
   echo "      mOSL Version:   ${LOCKDOWN_VERSION}"
@@ -304,6 +317,7 @@ function debug {
   echo "      Full Disk Access: ${has_full_disk_access}"
   echo "      Virtual Machine: ${is_vm}"
   echo "      Codesigned:      ${is_codesigned}"
+  echo "      SIP:             ${sip}"
   echo ""
 
   exit 0
@@ -810,6 +824,7 @@ function main {
   declare t2_mac="False"
   declare is_vm="False"
   declare is_codesigned="False"
+  declare sip="False"
 
   settings=(enable_automatic_system_updates enable_automatic_app_store_updates enable_gatekeeper enable_firewall enable_admin_password_preferences \
                   enable_terminal_secure_entry enable_sip enable_filevault \
