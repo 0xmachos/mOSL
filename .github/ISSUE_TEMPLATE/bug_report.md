@@ -4,7 +4,7 @@ about: Create a report to help us improve
 
 ---
 
-**_Only_ bugs related to the latest macOS release, Mojave (`10.14.x`), will be fixed**
+**_Only_ bugs related to the latest macOS release, Catalina (`10.15.x`), will be fixed**
 
 Output of `./Lockdown debug`: 
 ```
