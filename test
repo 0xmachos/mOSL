@@ -18,7 +18,6 @@ tput sgr0;
 # reset colors
 
 readonly RESET=$(tput sgr0)
-readonly BOLD=$(tput bold)
 
 readonly RED=$(tput setaf 1)
 readonly GREEN=$(tput setaf 64)
