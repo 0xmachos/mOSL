@@ -35,6 +35,7 @@ function usage {
   echo -e "    ${RED}fix${RESET}          - Attempt to fix all or chosen setting(s) (${BOLD}Does change settings${RESET})\\n"
   echo "    ${RED}fix-force${RESET}    - Same as 'fix' however bypasses user confirmation prompt"
   echo -e "                   (Can be used to invoke Lockdown from other scripts)\\n"
+  echo "    version      - Print Lockdown version string"
   echo -e "    debug        - Print debug info for troubleshooting\\n"
 
   exit 0
