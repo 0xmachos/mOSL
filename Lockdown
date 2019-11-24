@@ -312,7 +312,7 @@ function debug {
     sip="True"
   fi
 
-  echo -e "\\n${RED}Debug information:${RESET} \\n"
+  echo -e "${RED}Debug information:${RESET} \\n"
 
   echo "      mOSL Version:   ${LOCKDOWN_VERSION}"
   /usr/sbin/system_profiler SPSoftwareDataType | /usr/bin/grep 'Version'
