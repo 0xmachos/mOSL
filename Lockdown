@@ -307,6 +307,10 @@ function debug {
 
   if verify_signature >/dev/null 2>&1; then 
     is_codesigned="True"
+    # If the signature has been broken and you uncomment the 
+    # call to verify_signature in main and try to run 
+    # ./Lockdown debug this verify_signature call will still
+    # exit 1 with no explanation
   fi
 
   if check_sip; then
