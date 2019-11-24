@@ -57,6 +57,7 @@ function usage {
 # debug
 # full_disk_access_check
 # statistics
+# version
 
 
 function macos_compatability_check {
@@ -402,6 +403,11 @@ function statistics {
       fi
     fi
   fi
+}
+
+
+function version {
+  echo "${LOCKDOWN_VERSION}"
 }
 
 
@@ -951,6 +957,10 @@ function main {
 
     usage|help|-h|--help|🤷‍♂️|🤷‍♀️)
       usage
+      ;;
+
+    version|-v|--version)
+      version
       ;;
     
     *)
