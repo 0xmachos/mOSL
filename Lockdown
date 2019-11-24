@@ -800,8 +800,7 @@ function main {
         # shellcheck disable=SC2116
         setting_read="$(echo "${setting//_/ }")"
         # Replace underscore with a space, more human readable
-        echo "  [${RED}${setting_index}${RESET}] ${setting_read}"
-
+        echo "  (${RED}${setting_index}${RESET}) ${setting_read}"
       done
       
       echo
