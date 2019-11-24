@@ -325,7 +325,8 @@ function debug {
   # verify_signature is the first thing called in main so Lockdown 
   # will exit before it evaluates $cmd
   echo "      SIP:             ${sip}"
-  echo ""
+  echo "      T2:              ${t2_mac}"
+  echo
 
   exit 0
 }
