@@ -320,6 +320,9 @@ function debug {
   echo "      Full Disk Access: ${has_full_disk_access}"
   echo "      Virtual Machine: ${is_vm}"
   echo "      Codesigned:      ${is_codesigned}"
+  # Codesigned will only ever be "True" or "no minisign" as
+  # verify_signature is the first thing called in main so Lockdown 
+  # will exit before it evaluates $cmd
   echo "      SIP:             ${sip}"
   echo ""
 
