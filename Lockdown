@@ -827,7 +827,6 @@ function main {
       fi
 
       echo
-
       ;;
 
     fix|fix-force)
@@ -859,7 +858,6 @@ function main {
       fi
 
       echo
-      
       ;;
 
     debug)
