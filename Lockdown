@@ -28,11 +28,11 @@ readonly BOLD="$(/usr/bin/tput bold)"
 
 function usage {
   echo -e "\\n  Audit or Fix macOS security settings🔒🍎\\n"
-  echo -e "  Usage: ./Lockdown [list | audit {setting_index} | fix {setting_index} | debug]\\n"
+  echo -e "  Usage: ./Lockdown [list | audit {setting} | fix {setting} | version | debug]\\n"
 
   echo "    list         - List settings that can be audited/ fixed" 
-  echo "    audit        - Audit the status of all or chosen setting(s) (${BOLD}Does NOT change settings${RESET})"
-  echo -e "    ${RED}fix${RESET}          - Attempt to fix all or chosen setting(s) (${BOLD}Does change settings${RESET})\\n"
+  echo "    audit        - Audit the status of all or chosen setting"
+  echo -e "    ${RED}fix${RESET}          - Attempt to fix all or chosen setting\\n"
   echo "    ${RED}fix-force${RESET}    - Same as 'fix' however bypasses user confirmation prompt"
   echo -e "                   (Can be used to invoke Lockdown from other scripts)\\n"
   echo "    version      - Print Lockdown version string"
