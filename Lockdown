@@ -56,7 +56,6 @@ function usage {
 # check_sip
 # debug
 # full_disk_access_check
-# statistics
 # version
 
 
@@ -339,72 +338,6 @@ function full_disk_access_check {
     return 1
   fi
 }
-
-
-function statistics {
-
-  declare -i offset=0
-
-  if [[ "${t2_mac}" == "True" ]]; then
-    offset=$((offset+1))
-  fi
-
-  if ! full_disk_access_check; then
-    offset=$((offset+full_disk_fails))
-  fi
-  # $offset and the above if checks are a hacky fix to make the statistics correct
-  # Because fix mode calls audit commands first, any counter placed inside 
-  # Settings functions will be called twice in fix mode
-
-  if [[ "${cmd}" == "audit" ]]; then 
-
-    if [ $((audit_fails-offset)) -le 0 ]; then
-      # I think this is correct rather than just checking "${audit_fails}"
-      echo -e "\\n  [🎉] All settings passed!"
-      exit 0
-    else
-      echo -e "\\n  [❌] ${BOLD}$((audit_fails-offset))${RESET}/${#settings[@]} settings ${RED}failed${RESET} 😢\\n"
-      
-      if ! full_disk_access_check; then
-        echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need Full Disk Access permission to audit"
-        echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
-      fi
-
-      if ! check_if_vm; then
-        echo "  [⚠️ ] ${BOLD}1${RESET} setting can't be audited in a virtual machine"
-      fi
-    fi
-  
-  elif [[ "${cmd}" == "fix" ]]; then
-    
-    if [ $((audit_fails-offset)) -le 0 ]; then
-      echo -e "\\n  [🎉] Nothing to fix!\\n"
-      exit 0
-    else
-      echo -e "\\n  [⚠️ ] ${BOLD}$((audit_fails-offset))${RESET}/${#settings[@]} needed fixed"
-      
-      if [ "${successful_fixes}" -gt 0 ]; then
-        echo -e "  [🎉] ${BOLD}${successful_fixes}${RESET}/${audit_fails} fixed!\\n"
-      else
-        echo -e "  [❌] ${BOLD}No${RESET} settings successfully fixed!\\n"
-      fi
-      
-      if [ "${no_fix_commands}" -gt 0 ]; then
-        echo -e "  [❌] ${BOLD}${no_fix_commands}${RESET} can't be programmatically fixed 😢\\n"
-      fi
-
-      if ! full_disk_access_check; then
-        echo "  [⚠️ ] ${BOLD}${full_disk_fails}${RESET} settings need the Full Disk Access permission to fix"
-        echo -e "  [🍺] See the 'Full Disk Access Permission' section of 'README.md' for instructions\\n"
-      fi
-
-      if ! check_if_vm; then
-        echo "  [⚠️ ] ${BOLD}1${RESET} setting can't be fixed in a virtual machine"
-      fi
-    fi
-  fi
-}
-
 
 function version {
   echo "${LOCKDOWN_VERSION}"
@@ -837,15 +770,9 @@ function main {
 
   declare -r cmd=${1:-"usage"}
   declare -a settings
-  declare -i audit_fails=0
-  declare -i no_fix_commands=0
-  declare -i successful_fixes=0
   declare -i setting_index=-1
   declare audit_setting_num
   declare fix_setting_num
-  declare -ir full_disk_fails=2
-  # Decalre this as 2 as their are only two settings which require Full Disk Access
-  # If the permission isnt granted they will both fail
   declare t2_mac="False"
   declare is_vm="False"
   declare is_codesigned="False"
@@ -889,22 +816,16 @@ function main {
       echo -e "\\nResults: "
       
       if ! [ "${audit_setting_num}" -lt 0 ]; then
-        if ! "${settings[${audit_setting_num}]}" "audit"; then
-        # Audit whichever setting has been passed to  
-          audit_fails=$((audit_fails+1))
-        fi
-
+        "${settings[${audit_setting_num}]}" "audit"
       else
 
         for setting in "${settings[@]}"; do 
-          if ! "${setting}" "audit"; then 
+          "${setting}" "audit"
           # Call functions in 'settings' array with the argument 'audit'
-          audit_fails=$((audit_fails+1))
-          fi
         done
-
-        statistics
       fi
+
+      echo
 
       ;;
 
@@ -922,15 +843,8 @@ function main {
       echo -e "\\nResults: "
 
       if ! [ "${fix_setting_num}" -lt 0  ]; then
-
-        if ! "${settings[${fix_setting_num}]}" "audit"; then
-        # Audit whichever setting has been passed to  
-          audit_fails=$((audit_fails+1))
-
-          if "${settings[${fix_setting_num}]}" "fix"; then
-            successful_fixes=$((successful_fixes+1))
-          fi
-        fi
+        "${settings[${fix_setting_num}]}" "audit"
+      
       else
 
         for setting in "${settings[@]}"; do 
@@ -938,16 +852,12 @@ function main {
           if ! "${setting}" "audit" >/dev/null; then
           # Run the audit command first
           # Only run the fix command if audit fails
-            audit_fails=$((audit_fails+1))
-      
-            if "${setting}" "fix"; then
-              successful_fixes=$((successful_fixes+1))
-            fi
+          "${setting}" "fix"
           fi
         done
-
-        statistics
       fi
+
+      echo
       
       ;;
 
