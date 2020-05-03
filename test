@@ -41,6 +41,8 @@ function check_shellcheck {
 function lint_shell_files {
 
   for file in $(find . -type f -not -iwholename '*.git*' \
+  local file
+
                 -not -iwholename '*venv*' \
                 | sort -u); do
             # Find all regular files in source directory
