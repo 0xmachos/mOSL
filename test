@@ -6,27 +6,25 @@
 #   Adapted from jessfraz/dotfiles/bin/test.sh
 #   https://github.com/jessfraz/dotfiles/blob/master/test.sh
 
-
 set -euo pipefail
 # -e exit if any command returns non-zero status code
 # -u prevent using undefined variables
 # -o pipefail force pipelines to fail on first non-zero status code
 
-
 ### Define Colours ###
 tput sgr0; 
 # reset colors
-
 readonly RESET=$(tput sgr0)
-
 readonly RED=$(tput setaf 1)
 readonly GREEN=$(tput setaf 64)
 readonly BLUE=$(tput setaf 4)
 ### END Colours ###
 
+### Define Message Format
 FAIL="${RED}FATAL${RESET}"
 PASS="${GREEN}PASS${RESET}"
 INFO="${BLUE}INFO${RESET}"
+### END Message Format
 
 
 function check_shellcheck {
