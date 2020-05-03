@@ -42,7 +42,7 @@ function lint_shell_files {
 
   local file
 
-  for file in $(/usr/bin/find . -type f -not -iwholename '*.git*' \
+  for file in $(/usr/bin/find . -maxdepth 1 -type f -not -iwholename '*.git*' \
                 -not -iwholename '*venv*' \
                 | /usr/bin/sort -u); do
             # Find all regular files in source directory
