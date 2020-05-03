@@ -1,5 +1,5 @@
 # macOS Lockdown (mOSL)
-[![Build Status](https://travis-ci.org/0xmachos/mOSL.svg?branch=master)](https://travis-ci.org/0xmachos/mOSL) [![GitHub Release](https://github-basic-badges.herokuapp.com/release/0xmachos/mOSL.svg)](https://github.com/0xmachos/mOSL/releases/latest)
+![Shellcheck](https://github.com/0xmachos/mOSL/workflows/Shellcheck/badge.svg) [![GitHub Release](https://github-basic-badges.herokuapp.com/release/0xmachos/mOSL.svg)](https://github.com/0xmachos/mOSL/releases/latest)
 
 Bash script to audit and fix macOS Catalina (`10.15.x`) security settings
 
