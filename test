@@ -44,6 +44,7 @@ function lint_shell_files {
 
   for file in $(/usr/bin/find . -maxdepth 1 -type f -not -iwholename '*.git*' \
                 -not -iwholename '*venv*' \
+                -not -iwholename '*.tar.xz' \
                 | /usr/bin/sort -u); do
             # Find all regular files in source directory
             # ignore any files in .git and venv directories 
