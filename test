@@ -70,7 +70,7 @@ function lint_shell_files {
 
 function main {
 
-  ERRORS=()
+  declare -a ERRORS
 
   check_shellcheck
   lint_shell_files
