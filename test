@@ -40,15 +40,15 @@ function check_shellcheck {
 
 function lint_shell_files {
 
-  for file in $(find . -type f -not -iwholename '*.git*' \
   local file
 
+  for file in $(/usr/bin/find . -type f -not -iwholename '*.git*' \
                 -not -iwholename '*venv*' \
                 | sort -u); do
             # Find all regular files in source directory
             # ignore any files in .git and venv directories 
     
-    if file "${file}" | grep --quiet "shell" || file "${file}" | grep --quiet "bash" ; then
+    if /usr/bin/file "${file}" | /usr/bin/grep --quiet "shell" || /usr/bin/file "${file}" | /usr/bin/grep --quiet "bash" ; then
       # Find bash scripts
       # Running file on a script with the shebang "#!/usr/bin/env bash" returns
       # "a /usr/bin/env bash script, ASCII text executable"
