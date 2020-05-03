@@ -29,7 +29,7 @@ INFO="${BLUE}INFO${RESET}"
 
 function check_shellcheck {
 
-  if ! [ -x "$(command -v shellcheck)" ]; then
+  if ! [ -x "$(/usr/bin/command -v shellcheck)" ]; then
     echo -e "[${FAIL}] shellcheck not installed"
     echo -e "[${INFO}] macOS: brew install shellcheck"
     echo -e "[${INFO}] Linux: apt install shellcheck"
