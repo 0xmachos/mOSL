@@ -2,7 +2,7 @@
 # mOSL/test
 
 # test
-#   Find bash scripts then run shellcheck
+#   Find shell and bash scripts and run shellcheck on them
 #   Adapted from jessfraz/dotfiles/bin/test.sh
 #   https://github.com/jessfraz/dotfiles/blob/master/test.sh
 
