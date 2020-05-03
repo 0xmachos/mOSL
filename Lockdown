@@ -16,7 +16,7 @@ IFS=$'\n\t'
 
 ### Define Colours ###
 
-tput sgr0; 
+/usr/bin/tput sgr0; 
 # reset colors
 
 readonly RED="$(/usr/bin/tput setaf 1)"
