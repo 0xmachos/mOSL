@@ -12,12 +12,12 @@ set -euo pipefail
 # -o pipefail force pipelines to fail on first non-zero status code
 
 ### Define Colours ###
-tput sgr0; 
+/usr/bin/tput sgr0; 
 # reset colors
-readonly RESET=$(tput sgr0)
-readonly RED=$(tput setaf 1)
-readonly GREEN=$(tput setaf 64)
-readonly BLUE=$(tput setaf 4)
+readonly RESET=$(/usr/bin/tput sgr0)
+readonly RED=$(/usr/bin/tput setaf 1)
+readonly GREEN=$(/usr/bin/tput setaf 64)
+readonly BLUE=$(/usr/bin/tput setaf 4)
 ### END Colours ###
 
 ### Define Message Format
