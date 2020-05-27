@@ -160,7 +160,7 @@ done <<< $(networksetup -listallnetworkservices | tail -n $(( $(networksetup -li
 ### Fix 
 ```
 while read -r i; do 
-  networksetup -setv6off "${i}"
+  sudo networksetup -setv6off "${i}"
 done <<< "$(networksetup -listallnetworkservices | tail -n $(( $(networksetup -listallnetworkservices | wc -l) - 1 )))"
 ```
 
