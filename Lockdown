@@ -3,7 +3,7 @@
 
 # Lockdown
 #   Lockdown macOS Catalina security settings
-declare -r LOCKDOWN_VERSION="v3.1.0"
+declare -r LOCKDOWN_VERSION="v3.2.0"
 
 set -uo pipefail
 # -u prevent using undefined variables
