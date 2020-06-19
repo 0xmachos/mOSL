@@ -108,7 +108,6 @@ function fix {
 
   if [[ "${command}" == "null" ]]; then
     echo "  [⚠️ ] ${BOLD}Can't fix${RESET}: ${title}"
-    no_fix_commands=$((no_fix_commands+1))
     return 1
   fi
 
